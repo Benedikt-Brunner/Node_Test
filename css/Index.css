@@ -1,0 +1,131 @@
+h1{
+       font-size: 5vw;
+        font-weight: bold;
+        text-align: center;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        margin-bottom: 0;
+}
+
+body {
+    background: linear-gradient(-45deg,  #23a6d5, #54d3d3, #23d5ab,#41db9b);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    height: 100vh;
+    font-family: 'Sono', sans-serif;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#Nav{
+    width: 45vw;
+    height: 30vw;
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    margin-top: 8vw;
+    flex-wrap: wrap;
+    padding: 10px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+  
+
+#Nav > :nth-child(1) {
+    position: relative;
+    width: 20vw;
+    height: 12.5vw;
+    background-color: white;
+    border-radius: 25px;
+    transition: 1s;
+    font-size: 2vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+#Blacktext:any-link{
+    color:black;
+    text-decoration: none;
+}
+
+#Whitetext:any-link{
+    color:white;
+    text-decoration: none;
+}
+
+
+#Nav > :nth-child(4) {
+    position: relative;
+    width: 20vw;
+    height: 12.5vw;
+    background-color: white;
+    border-radius: 25px;
+    transition: 1s;
+    font-size: 2vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#Nav > :nth-child(2) {
+    position: relative;
+    width: 20vw;
+    height: 12.5vw;
+    background-color: black;
+    border-radius: 25px;
+    transition: 1s;
+    font-size: 2vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#Nav > :nth-child(3) {
+    position: relative;
+    width: 20vw;
+    height: 12.5vw;
+    background-color: black;
+    border-radius: 25px;
+    transition: 1s;
+    font-size: 2vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#Nav > :nth-child(1):hover {
+    transition: 1s;
+    scale: 110%;
+}
+
+#Nav > :nth-child(2):hover {
+    transition: 1s;
+    scale: 110%;
+}
+
+#Nav > :nth-child(3):hover {
+    transition: 1s;
+    scale: 110%;
+}
+
+#Nav > :nth-child(4):hover {
+    transition: 1s;
+    scale: 110%;
+}
