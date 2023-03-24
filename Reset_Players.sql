@@ -1,0 +1,13 @@
+UPDATE players SET Total_Games_Played = 0;
+UPDATE players SET Classical_Games_Played = 0;
+UPDATE players SET Blitz_Games_Played = 0;
+UPDATE players SET Rapid_Games_Played = 0;
+UPDATE players SET C960_Games_Played = 0;
+UPDATE players SET Classical_ELORating = 1500;
+UPDATE players SET Classical_Rank = 1;
+UPDATE players SET Blitz_ELORating = 1500;
+UPDATE players SET Blitz_Rank = 1;
+UPDATE players SET Rapid_ELORating = 1500;
+UPDATE players SET Rapid_Rank = 1;
+UPDATE players SET C960_ELORating = 1500;
+UPDATE players SET C960_Rank = 1;

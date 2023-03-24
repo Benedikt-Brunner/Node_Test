@@ -1,4 +1,4 @@
-const {readFile, readFileSync} = require('fs');
+const {readFile, readFileSync, writeFile, writeFileSync} = require('fs');
 const express = require('express');
 const app = express();
 const mysql = require('mysql');
@@ -7,12 +7,13 @@ const http = require('http');
 const server = http.createServer(app);
 app.use(express.static("./css"));
 
-app.use(express.json()); // This line enables parsing of JSON request bodies
+app.use(express.json()); 
 
 app.post('/button-clicked', (req, res) => {
   const inputData = req.body.inputData;
   if (inputData) {
-    console.log(inputData);
+    writeFileSync("Input.json",('{"Games": ' + JSON.stringify(inputData) + '}'));
+    inputGames();
     res.send('Button clicked successfully!');
   } else {
     res.status(400).send('Bad Request');
@@ -20,7 +21,7 @@ app.post('/button-clicked', (req, res) => {
 });
 
 function inputGames(){
-exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "0${__dirname}/TestInput.json!Games"`, (error, stdout, stderr) => {
+exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "0${__dirname}/Input.json!Games"`, (error, stdout, stderr) => {
   if (error) {
       console.log(`error: ${error.message}`);
       return;
@@ -46,7 +47,7 @@ con.connect(function(err) {
 
 
 function getPlayers(callback) {
-    con.query('SELECT Name, Classical_ELORATING, Classical_Rank, Blitz_ELORATING, Blitz_Rank, Rapid_ELORATING, Rapid_Rank, C960_Elorating, C960_Rank, Classical_Games_Played, BLitz_Games_Played, Rapid_Games_Played, Total_Games_Played FROM Players', (err, result) => {
+    con.query('SELECT Name, Classical_ELORATING, Classical_Rank, Blitz_ELORATING, Blitz_Rank, Rapid_ELORATING, Rapid_Rank, C960_Elorating, C960_Rank, Classical_Games_Played, BLitz_Games_Played, Rapid_Games_Played,C960_Games_Played,Total_Games_Played FROM Players', (err, result) => {
       if (err) throw err;
       callback(result);
     });
@@ -55,7 +56,7 @@ function getPlayers(callback) {
  
 
 
-  app.get('/results',(request, response) =>{
+  app.get('/getplayers',(request, response) =>{
   
        
     getPlayers((players) => {

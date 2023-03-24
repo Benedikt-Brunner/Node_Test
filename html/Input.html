@@ -1,127 +1,136 @@
 <html>
-    <head>
-        <title>
-            Test
-    
-    
-        </title>
-        <link rel="shortcut icon" type="image/x-icon" href="site_favicon_16_1664892280095.ico" />
-        <link rel="stylesheet" href="Input.css">
-    </head>
-    <body>
 
-        <h1>
-            <a href="/">&lt/Sc Springer Bad König></a>
-        </h1>
+<head>
+    <title>
+        Test
 
-        
-        <div id="buttondiv">
-    
-            <div>
-                <button id="GameAdd on" onclick=addInput()>Add Input</button>
-            </div>
-            <div>
-                <button id="myButton">Input Games</button>
-            </div>
-            
+
+    </title>
+    <link rel="shortcut icon" type="image/x-icon" href="site_favicon_16_1664892280095.ico" />
+    <link rel="stylesheet" href="Input.css">
+</head>
+
+<body onload=addInput()>
+
+    <h1>
+        <a href="/">&lt/Sc Springer Bad König></a>
+    </h1>
+
+
+    <div id="buttondiv">
+
+        <div>
+            <button id="GameAdd on" onclick=addInput()>Add Input</button>
         </div>
-    
-       
-        <div id="Inputdivs" onload= addInput()>
-            <div class="InputBlock">
+        <div>
+            <button id="myButton">Input Games</button>
+        </div>
 
-                <label for="player1">Spieler1:</label>
-                <select name="player1" id="resultselect">
-                    <option value="WhiteWon">Weiß gewinnt</option>
-                    <option value="Draw">Remis</option>
-                    <option value="BlackWon">Schwarz gewinnt</option>
-                </select>
-
-                <label for="player2">Spieler2:</label>
-                <select name="player2" id="gametypeselect">
-                    <option value="Classial">Klassisch</option>
-                    <option value="Rapid">Schnellschach</option>
-                    <option value="BLitz">Blitz</option>
-                    <option value="C960">Schach960</option>
-                </select>
-
-                <label for="results">Ergebniss:</label>
-                <select name="results" id="resultselect">
-                    <option value="WhiteWon">Weiß gewinnt</option>
-                    <option value="Draw">Remis</option>
-                    <option value="BlackWon">Schwarz gewinnt</option>
-                </select>
-
-                <label for="gametypes">Spielart:</label>
-                <select name="gametypes" id="gametypeselect">
-                    <option value="Classial">Klassisch</option>
-                    <option value="Rapid">Schnellschach</option>
-                    <option value="BLitz">Blitz</option>
-                    <option value="C960">Schach960</option>
-                </select>
-     
-                <label for="date">Datum:</label>
-        <input type="date" id="start" name="Date" min="2000-01-01">
     </div>
+
+
+    <div id="Inputdivs">
+ 
     </div>
-    
-    
-        <script>
-          const button = document.getElementById('myButton');
-          button.addEventListener('click', () => {
+
+
+    <script>
+        let check = window.setInterval(checktick,50)
+        const button = document.getElementById('myButton');
+        button.addEventListener('click', () => {
             const inputblocks = document.getElementsByClassName('InputBlock');
-        const inputData = [];
-        for (let i = 0; i < inputblocks.length; i++) {
-          let inputfields = inputblocks[i].children;
-          const blockData = {};
-          for (let n = 0; n < inputfields.length; n++) {
-            let key = inputfields[n].name;
-            let value = inputfields[n].value;
-            blockData[key] = value;
-          }
-          inputData.push(blockData);
-        }
-        const data = { inputData: inputData };
+            const inputData = [];
+            for (let i = 0; i < inputblocks.length; i++) {
+                let inputfields = inputblocks[i].children;
+                const blockData = {};
+                for (let n = 0; n < inputfields.length; n++) {
+                    let key = inputfields[n].name;
+                    let value = inputfields[n].value;
+                    blockData[key] = value;
+                }
+                inputData.push(blockData);
+            }
+            const data = { inputData: inputData };
+            if(checktick()){
             fetch('/button-clicked', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(data)
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
             })
-              .then(response => response.text())
-              .then(data => console.log(data))
-              .catch(error => console.log(error));
+                .then(response => response.text())
+                .then(data => console.log(data))
+                .catch(error => console.log(error));
 
-              let len = inputblocks.length;
-              for(let i = 0; i < len; i++){
-      
+            let len = inputblocks.length;
+            for (let i = 0; i < len; i++) {
                 inputblocks.item(0).remove();
-                
-                
-              }
-              addInput();
-          });
+            }
+            addInput();}
+        });
 
-            function addInput(){
-                let div = document.getElementById("Inputdivs");
-                let block = document.createElement("div");
-                block.className = "InputBlock";
-                let names = Array();
-                fetch('/results', {
+        function addInput() {
+            let div = document.getElementById("Inputdivs");
+            let block = document.createElement("div");
+            block.className = "InputBlock";
+            let names = Array();
+            fetch('/getplayers', {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json' },})
+                headers: { 'Content-Type': 'application/json' },
+            })
                 .then(response => response.text())
                 .then(text => JSON.parse(text))
                 .then(players => {
-                    for(let i = 0; i < players.length; i++){
+                    let select1 = document.createElement("select")
+                    let select2 = document.createElement("select")
+                    select1.name = "player1"
+                    select2.name = "player2"
+                    select1.id = "playerselect1"
+                    select2.id = "playerselect2"
+
+
+                    for (let i = 0; i < players.length; i++) {
                         names.push(players[i].Name)
                     }
-                    console.log(names[0])
+                    names.forEach(name => {
+                        let html = '<option value="' + name + '">' + name + '</option>'
+                        select1.innerHTML += html
+                    })
+
+                    names.forEach(name => {
+                        let html = '<option value="' + name + '">' + name + '</option>'
+                        select2.innerHTML += html
+                    })
+                    block.innerHTML += '<label for="player1">Spieler1:</label>'
+                    block.appendChild(select1)
+                    block.innerHTML += '<label for="player2"> Spieler2:</label>'
+                    block.appendChild(select2)
+                    let date =  new Date().getFullYear()+1;
+                    block.innerHTML += ' <label for= "result"> Ergebniss:</label > <select name="result" id="resultselect"> <option value="WhiteWon">Weiß gewinnt</option> <option value="Draw">Remis</option> <option value="BlackWon">Schwarz gewinnt</option> </select> <label for="gametype">Spielart:</label> <select name="gametype" id="gametypeselect"> <option value="Classical">Klassisch</option> <option value="Rapid">Schnellschach</option> <option value="BLitz">Blitz</option> <option value="Chess960">Schach960</option> </select> <label for="date">Datum:</label> <input type="date" id="start" name="date" min="2000-01-01" max="'+date+'-01-01"> <span id = "checkspan">❌</span>'
+
                 })
                 
                 div.appendChild(block)
             }
 
-        </script>
- 
-    </body>
+            function checktick(){
+                let checksum = true;
+                let blocks = [...document.getElementsByClassName("InputBlock")]
+                blocks.forEach(block =>{
+                    let children = [...block.children]
+                    if(children[1].value != children[3].value && children[9].value != ""){
+                        children[10].innerHTML = "✅"
+                    }else{
+                        children[10].innerHTML = "❌"
+                        checksum = false;
+                    }
+                })
+                
+                return checksum;
+                
+            }
+
+    </script>
+
+</body>
+
 </html>
