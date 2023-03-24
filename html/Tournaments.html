@@ -1,0 +1,128 @@
+<html>
+
+<head>
+    <title>
+        Test
+
+
+    </title>
+    <link rel="shortcut icon" type="image/x-icon" href="site_favicon_16_1664892280095.ico" />
+    <link rel="stylesheet" href="Players.css">
+</head>
+
+<body onload = updatePlayers()>
+
+
+    <h1>
+        <a href="/">&lt/Sc Springer Bad König></a>
+    </h1>
+    <div class="butdiv"><button onclick=updatePlayers()>Update</button>
+    </div>
+
+  
+    <div class="table-wrapper">
+        <table class="fl-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Classical_ELORATING</th>
+                    <th>Classical_Rank</th>
+                    <th>Blitz_ELORATING</th>
+                    <th>Blitz_Rank</th>
+                    <th>Rapid_ELORATING</th>
+                    <th>Rapid_Rank</th>
+                    <th>C960_Elorating</th>
+                    <th>C960_Rank</th>
+                    <th>Classical_Games_Played</th>
+                    <th>BLitz_Games_Played</th>
+                    <th>Rapid_Games_Played</th>
+                    <th>C960_Games_Played</th>
+                    <th>Total_Games_Played</th>
+                </tr>
+            </thead>
+            <tbody id="Players">
+
+
+            <tbody>
+        </table>
+    </div>
+
+
+
+
+
+
+    <script>
+
+        function updatePlayers() {
+            let test = document.getElementById('Players')
+            if (test.innerHTML.length != 0) {
+                test.innerHTML = "";
+            }
+            fetch('/getplayers', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+
+            })
+                .then(response => response.text())
+                .then(text => JSON.parse(text))
+                .then(players => {
+                    for (let i = 0; i < players.length; i++) {
+                        let table = document.getElementById('Players');
+                        let tr = document.createElement('tr');
+                        let td1 = document.createElement('td');
+                        let td2 = document.createElement('td');
+                        let td3 = document.createElement('td');
+                        let td4 = document.createElement('td');
+                        let td5 = document.createElement('td');
+                        let td6 = document.createElement('td');
+                        let td7 = document.createElement('td');
+                        let td8 = document.createElement('td');
+                        let td9 = document.createElement('td');
+                        let td10 = document.createElement('td');
+                        let td11 = document.createElement('td');
+                        let td12 = document.createElement('td');
+                        let td13 = document.createElement('td');
+                        let td14 = document.createElement('td');
+                        td1.innerHTML = players[i].Name;
+                        td2.innerHTML = players[i].Classical_ELORATING;
+                        td3.innerHTML = players[i].Classical_Rank;
+                        td4.innerHTML = players[i].Blitz_ELORATING;
+                        td5.innerHTML = players[i].Blitz_Rank;
+                        td6.innerHTML = players[i].Rapid_ELORATING;
+                        td7.innerHTML = players[i].Rapid_Rank;
+                        td8.innerHTML = players[i].C960_Elorating;
+                        td9.innerHTML = players[i].C960_Rank;
+                        td10.innerHTML = players[i].Classical_Games_Played;
+                        td11.innerHTML = players[i].BLitz_Games_Played;
+                        td12.innerHTML = players[i].Rapid_Games_Played;
+                        td13.innerHTML = players[i].C960_Games_Played;
+                        td14.innerHTML = players[i].Total_Games_Played;
+                        tr.appendChild(td1);
+                        tr.appendChild(td2);
+                        tr.appendChild(td3);
+                        tr.appendChild(td4);
+                        tr.appendChild(td5);
+                        tr.appendChild(td6);
+                        tr.appendChild(td7);
+                        tr.appendChild(td8);
+                        tr.appendChild(td9);
+                        tr.appendChild(td10);
+                        tr.appendChild(td11);
+                        tr.appendChild(td12);
+                        tr.appendChild(td13);
+                        tr.appendChild(td14)
+                        table.appendChild(tr);
+                    }
+                })
+        }
+
+
+
+
+
+    </script>
+   
+</body>
+
+</html>

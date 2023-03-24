@@ -66,6 +66,46 @@ function getPlayers(callback) {
 
     });
 
+    function getGames(callback) {
+      con.query('SELECT p1.name AS WhitePlayerName, p2.name AS BlackPlayerName, g.Result, g.Gametype, g.Date,g.URL,t.name AS TournamentName FROM games g JOIN players p1 ON g.WhitePlayer = p1.id JOIN players p2 ON g.BlackPlayer = p2.id Join tournaments t on g.TOURNAMENT_ID = t.id; ', (err, result) => {
+        if (err) throw err;
+        callback(result);
+      });
+    }
+    
+   
+  
+  
+    app.get('/getgames',(request, response) =>{
+    
+         
+      getGames((players) => {
+          response.send(players);
+        });
+          
+  
+      });
+
+      function gettour(callback) {
+        con.query('SELECT Name, Classical_ELORATING, Classical_Rank, Blitz_ELORATING, Blitz_Rank, Rapid_ELORATING, Rapid_Rank, C960_Elorating, C960_Rank, Classical_Games_Played, BLitz_Games_Played, Rapid_Games_Played,C960_Games_Played,Total_Games_Played FROM Players', (err, result) => {
+          if (err) throw err;
+          callback(result);
+        });
+      }
+      
+     
+    
+    
+      app.get('/gettour',(request, response) =>{
+      
+           
+        gettour((players) => {
+            response.send(players);
+          });
+            
+    
+        });
+
 
 app.get('/',(request, response) =>{
     readFile('./html/Index.html', 'utf8', (err, html) =>{
