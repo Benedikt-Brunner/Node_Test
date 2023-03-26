@@ -15,10 +15,13 @@
 
 <body>
 
-
-    <h1>
-        &lt/Sc Springer Bad König>
-    </h1>
+    <div class="butdiv">
+        
+        <h1>
+            &lt/Sc Springer Bad König>
+        </h1>
+            <button onclick=logout()>Log out</button>
+        </div>
 
     <div id="Nav">
         <div id = "Players">
@@ -34,7 +37,11 @@
             <a id="Blacktext" href="/Tournaments">Tournaments</a>
         </div>
     </div>
-
+<script>
+    function logout(){
+        location.href = "http://localhost:3000/logout"
+    }
+</script>
 </body>
 
 

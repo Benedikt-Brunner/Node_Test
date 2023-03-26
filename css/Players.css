@@ -1,21 +1,26 @@
 
 
 h1 {
+    -ms-flex-align: center;
     margin: auto;
-        width: fit-content;
-        font-size: 5vw;
-         font-weight: bold;
-         text-align: center;
-         font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-         margin-bottom: 5vw;
-         color: black;
- 
+    width: fit-content;
+    font-size: 5vw;
+    font-weight: bold;
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    margin-bottom: 5vw;
+    color: black;
+    margin-right: 0;
+    margin-left: 0;
+
 }
-a{
+
+a {
     color: white;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
-a:any-link{
+
+a:any-link {
     text-decoration: none;
 }
 
@@ -24,45 +29,35 @@ span{
     color: black;
 }
 
-button{
+button {
     border-radius: 50%;
-    width: 400px;
-    height: 200px;
- 
+    width: 175px;
+    height: 90px;
+    margin-right: 1vw;
+    margin-top: 1vw;
     color: #0f27bf;
     background-color: white;
-    font-size: 3vw;
+    font-size: 2vw;
 
 }
 
-button:active{
+button:active {
     transform: translateY(5px);
     scale: 95%;
 }
-#buttondiv{
-    width: fit-content;
-    display: flexbox;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-}
-#inputdivs{
-    border: solid 5px gray;
-    background-color: gray;
-    width: fit-content;
-    margin: auto;
-    display: flexbox;
-    justify-content: space-around;
-}
+
 .InputBlock{
     margin: 5px;
 }
-.butdiv{    margin: auto;
-    margin-top: 200px;
-    width: fit-content;
-    display: flexbox;
+
+
+.butdiv {
+    margin-left: 24vw;
+    margin-right: 0;
+    justify-content: space-between;
+    display: flex;
     flex-direction: row;
- }
+}
 
 
 

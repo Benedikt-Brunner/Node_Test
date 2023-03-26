@@ -12,35 +12,28 @@
 
 <body onload = updatePlayers()>
 
-
-    <h1>
-        <a href="/">&lt/Sc Springer Bad König></a>
-    </h1>
-    <div class="butdiv"><button onclick=updatePlayers()>Update</button>
-    </div>
+    <div class="butdiv">
+        
+        <h1>
+            <a href="/">&lt/Sc Springer Bad König></a>
+        </h1>
+            <button onclick=updatePlayers()>Update</button>
+        </div>
 
   
     <div class="table-wrapper">
         <table class="fl-table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Classical_ELORATING</th>
-                    <th>Classical_Rank</th>
-                    <th>Blitz_ELORATING</th>
-                    <th>Blitz_Rank</th>
-                    <th>Rapid_ELORATING</th>
-                    <th>Rapid_Rank</th>
-                    <th>C960_Elorating</th>
-                    <th>C960_Rank</th>
-                    <th>Classical_Games_Played</th>
-                    <th>BLitz_Games_Played</th>
-                    <th>Rapid_Games_Played</th>
-                    <th>C960_Games_Played</th>
-                    <th>Total_Games_Played</th>
+                    <th>Weiß</th>
+                    <th>Schwarz</th>
+                    <th>Ergebniss</th>
+                    <th>SpielTyp</th>
+                    <th>Datum</th>
+                    <th>Link</th>
                 </tr>
             </thead>
-            <tbody id="Players">
+            <tbody id="Games">
 
 
             <tbody>
@@ -55,20 +48,20 @@
     <script>
 
         function updatePlayers() {
-            let test = document.getElementById('Players')
+            let test = document.getElementById('Games')
             if (test.innerHTML.length != 0) {
                 test.innerHTML = "";
             }
-            fetch('/getplayers', {
+            fetch('/getgames', {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
 
             })
                 .then(response => response.text())
                 .then(text => JSON.parse(text))
-                .then(players => {
-                    for (let i = 0; i < players.length; i++) {
-                        let table = document.getElementById('Players');
+                .then(games => {
+                    for (let i = 0; i < games.length; i++) {
+                        let table = document.getElementById('Games');
                         let tr = document.createElement('tr');
                         let td1 = document.createElement('td');
                         let td2 = document.createElement('td');
@@ -76,42 +69,56 @@
                         let td4 = document.createElement('td');
                         let td5 = document.createElement('td');
                         let td6 = document.createElement('td');
-                        let td7 = document.createElement('td');
-                        let td8 = document.createElement('td');
-                        let td9 = document.createElement('td');
-                        let td10 = document.createElement('td');
-                        let td11 = document.createElement('td');
-                        let td12 = document.createElement('td');
-                        let td13 = document.createElement('td');
-                        let td14 = document.createElement('td');
-                        td1.innerHTML = players[i].Name;
-                        td2.innerHTML = players[i].Classical_ELORATING;
-                        td3.innerHTML = players[i].Classical_Rank;
-                        td4.innerHTML = players[i].Blitz_ELORATING;
-                        td5.innerHTML = players[i].Blitz_Rank;
-                        td6.innerHTML = players[i].Rapid_ELORATING;
-                        td7.innerHTML = players[i].Rapid_Rank;
-                        td8.innerHTML = players[i].C960_Elorating;
-                        td9.innerHTML = players[i].C960_Rank;
-                        td10.innerHTML = players[i].Classical_Games_Played;
-                        td11.innerHTML = players[i].BLitz_Games_Played;
-                        td12.innerHTML = players[i].Rapid_Games_Played;
-                        td13.innerHTML = players[i].C960_Games_Played;
-                        td14.innerHTML = players[i].Total_Games_Played;
+                        td1.innerHTML = games[i].WhitePlayerName;
+                        td2.innerHTML = games[i].BlackPlayerName;
+                        switch (games[i].Result) {
+                            case "WhiteWon":
+                            td3.innerHTML = "1 - 0";
+                                break;
+
+                            case "Draw":
+                            td3.innerHTML = "1/2 - 1/2";
+
+                            case "BlackWon": 
+                            td3.innerHTML = "0 - 1";
+
+                            default:
+
+                                break;
+                        }
+                        switch (games[i].Gametype) {
+                            case "Classical":
+                            td4.innerHTML = "Klassisch";
+                                break;
+
+                            case "Blitz":
+                            td4.innerHTML = "Blitz";
+
+                            case "Rapid": 
+                            td4.innerHTML = "Schnellschach";
+
+                            case "Chess960":
+                            td4.innerHTML = "Schach960";
+                        
+                            default:
+                            td4.innerHTML = "Klassisch";
+                                break;
+                        }
+                        let date = games[i].Date;
+                        date = date.split("T" , 1)
+                        td5.innerHTML = date;
+                        if(games[i].URL == null){
+                            td6.innerHTML = "❌";
+                        }else{
+                            td6.innerHTML = '<a href="'+ games[i].URL +'">✅></a>';
+                        }
+                        
                         tr.appendChild(td1);
                         tr.appendChild(td2);
                         tr.appendChild(td3);
                         tr.appendChild(td4);
                         tr.appendChild(td5);
                         tr.appendChild(td6);
-                        tr.appendChild(td7);
-                        tr.appendChild(td8);
-                        tr.appendChild(td9);
-                        tr.appendChild(td10);
-                        tr.appendChild(td11);
-                        tr.appendChild(td12);
-                        tr.appendChild(td13);
-                        tr.appendChild(td14)
                         table.appendChild(tr);
                     }
                 })

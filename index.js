@@ -1,13 +1,28 @@
 const {readFile, readFileSync, writeFile, writeFileSync} = require('fs');
 const express = require('express');
+const { auth, requiresAuth } = require('express-openid-connect');
 const app = express();
 const mysql = require('mysql');
 const {exec} = require("child_process");
 const http = require('http');
 const server = http.createServer(app);
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: 'Ve0VF1Ihg1DOHdH2V6yANx9WtAzmvBU7rOPUsrtt',
+  baseURL: 'http://localhost:3000',
+  clientID: 'sNvXjDNZVtVIp0tLaN0U3UJEXcZMWPvZ',
+  issuerBaseURL: 'https://dev-6nxdvsl2kt22elnw.eu.auth0.com'
+};
+
+
+app.use(auth(config));
 app.use(express.static("./css"));
 
 app.use(express.json()); 
+
+app.set('trust proxy', true);
 
 app.post('/button-clicked', (req, res) => {
   const inputData = req.body.inputData;
@@ -67,7 +82,7 @@ function getPlayers(callback) {
     });
 
     function getGames(callback) {
-      con.query('SELECT p1.name AS WhitePlayerName, p2.name AS BlackPlayerName, g.Result, g.Gametype, g.Date,g.URL,t.name AS TournamentName FROM games g JOIN players p1 ON g.WhitePlayer = p1.id JOIN players p2 ON g.BlackPlayer = p2.id Join tournaments t on g.TOURNAMENT_ID = t.id; ', (err, result) => {
+      con.query('SELECT p1.name AS WhitePlayerName, p2.name AS BlackPlayerName, g.Result, g.Gametype, g.Date,g.URL FROM games g JOIN players p1 ON g.WhitePlayer = p1.id JOIN players p2 ON g.BlackPlayer = p2.id; ', (err, result) => {
         if (err) throw err;
         callback(result);
       });
@@ -107,7 +122,7 @@ function getPlayers(callback) {
         });
 
 
-app.get('/',(request, response) =>{
+app.get('/',requiresAuth(),(request, response) =>{
     readFile('./html/Index.html', 'utf8', (err, html) =>{
 
         if(err){
@@ -118,7 +133,7 @@ app.get('/',(request, response) =>{
     })
 } );
 
-app.get('/Players',(request, response) =>{
+app.get('/Players',requiresAuth(),(request, response) =>{
   readFile('./html/Players.html', 'utf8', (err, html) =>{
 
       if(err){
@@ -129,7 +144,7 @@ app.get('/Players',(request, response) =>{
   })
 } );
 
-app.get('/Input',(request, response) =>{
+app.get('/Input',requiresAuth(),(request, response) =>{
   readFile('./html/Input.html', 'utf8', (err, html) =>{
 
       if(err){
@@ -140,7 +155,7 @@ app.get('/Input',(request, response) =>{
   })
 } );
 
-app.get('/Games',(request, response) =>{
+app.get('/Games',requiresAuth(),(request, response) =>{
   readFile('./html/Games.html', 'utf8', (err, html) =>{
 
       if(err){
@@ -151,7 +166,7 @@ app.get('/Games',(request, response) =>{
   })
 } );
 
-app.get('/Tournaments',(request, response) =>{
+app.get('/Tournaments',requiresAuth(),(request, response) =>{
   readFile('./html/Tournaments.html', 'utf8', (err, html) =>{
 
       if(err){
@@ -161,5 +176,20 @@ app.get('/Tournaments',(request, response) =>{
 
   })
 } );
+
+
+
+
+
+
+app.get('/', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+
+
+
+app.get('/profile', requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user));
+});
 
 app.listen(process.env.Port || 3000, () => console.log('App available on http://localhost:3000'))

@@ -1,9 +1,15 @@
-h1{
-       font-size: 5vw;
-        font-weight: bold;
-        text-align: center;
-        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-        margin-bottom: 0;
+h1 {
+    -ms-flex-align: center;
+    margin: auto;
+    width: fit-content;
+    font-size: 5vw;
+    font-weight: bold;
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: black;
+    margin-right: 0;
+    margin-left: 0;
+
 }
 
 body {
@@ -128,4 +134,31 @@ body {
 #Nav > :nth-child(4):hover {
     transition: 1s;
     scale: 110%;
+}
+
+
+button {
+    border-radius: 25px;
+    width: 175px;
+    height: 50px;
+    margin-right: 1vw;
+    margin-top: 2vw;
+    color: red;
+    background-color: black;
+    font-size: 2vw;
+
+}
+
+button:active {
+    transform: translateY(5px);
+    scale: 95%;
+}
+
+
+.butdiv {
+    margin-left: 24vw;
+    margin-right: 0;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
 }

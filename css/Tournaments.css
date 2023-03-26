@@ -1,0 +1,54 @@
+body {
+    font-family: Helvetica;
+    -webkit-font-smoothing: antialiased;
+    background: rgb(14, 7, 29);
+}
+
+h1 {
+    -ms-flex-align: center;
+    margin: auto;
+    width: fit-content;
+    font-size: 5vw;
+    font-weight: bold;
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    margin-bottom: 5vw;
+    color: black;
+    margin-right: 0;
+    margin-left: 0;
+
+}
+
+a {
+    color: white;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+a:any-link {
+    text-decoration: none;
+}
+
+button {
+    border-radius: 50%;
+    width: 175px;
+    height: 90px;
+    margin-right: 1vw;
+    margin-top: 1vw;
+    color: #0f27bf;
+    background-color: white;
+    font-size: 2vw;
+
+}
+
+button:active {
+    transform: translateY(5px);
+    scale: 95%;
+}
+
+.butdiv {
+    margin-left: 24vw;
+    margin-right: 0;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+}
