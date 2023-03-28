@@ -1,3 +1,8 @@
+
+:root{
+    --height: 150%;
+}
+
 body {
     font-family: Helvetica;
     -webkit-font-smoothing: antialiased;
@@ -52,3 +57,43 @@ button:active {
     display: flex;
     flex-direction: row;
 }
+
+.Tournamentdiv{
+    display: grid; 
+    grid-template-columns: 5fr 5fr; 
+    grid-template-rows: 5fr 10fr; 
+    gap: 6% 4%; 
+    grid-template-areas: 
+      ". ."
+      ". ."; 
+    box-shadow: 0px 0px 10px 10px white;
+}
+
+.Tournamentgrid{
+    height: var(--height);
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    display: inline-grid;
+    width: 95%;
+    grid-template-rows: repeat(auto-fill, 20vw);
+    grid-template-columns: [row1-start] 45% [last-line] 45%;
+    gap: 5%;
+
+    
+}
+
+h2{
+    -ms-flex-align: center;
+    font-size: 2vw;
+    font-weight: bold;
+    text-align: center;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+}
+
+
+
+
+
+
+

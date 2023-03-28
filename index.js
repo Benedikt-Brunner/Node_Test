@@ -5,6 +5,7 @@ const app = express();
 const mysql = require('mysql');
 const {exec} = require("child_process");
 const http = require('http');
+const ejs = require('ejs');
 const server = http.createServer(app);
 
 const config = {
@@ -16,7 +17,7 @@ const config = {
   issuerBaseURL: 'https://dev-6nxdvsl2kt22elnw.eu.auth0.com'
 };
 
-
+app.set('view engine', 'ejs');
 app.use(auth(config));
 app.use(express.static("./css"));
 
@@ -176,6 +177,16 @@ app.get('/Tournaments',requiresAuth(),(request, response) =>{
 
   })
 } );
+
+
+
+
+
+app.get('/Tournament/:tournamentId',requiresAuth(),(request, response) =>{
+  var tournamentId = request.params.tournamentId;
+
+    response.render('tournament', { tournamentId: tournamentId});
+}) ;
 
 
 
