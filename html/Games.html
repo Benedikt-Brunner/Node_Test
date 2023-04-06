@@ -20,6 +20,9 @@
     </div>
 
     <div class="nav">
+        <button class="left10" onclick=move10left()>
+            &lt&lt
+        </button>
         <button class="left" onclick=moveleft()>
             &lt
         </button>
@@ -28,6 +31,9 @@
         </span>
         <button class="right" onclick=moveright()>
             >
+        </button>
+        <button class="right10" onclick=move10right()>
+            >>
         </button>
     </div>
 
@@ -71,9 +77,27 @@
             }
         }
 
+        function move10left(){
+            let span = document.getElementsByClassName("Page").item(0);
+            if(page <= 10){
+                return;
+            }else{
+                page -= 10;
+                span.innerHTML = page;
+                updatePlayers();
+            }
+        }
+
         function moveright(){
             let span = document.getElementsByClassName("Page").item(0);
                 page++;
+                span.innerHTML = page;
+                updatePlayers();
+        }
+
+        function move10right(){
+            let span = document.getElementsByClassName("Page").item(0);
+                page += 10;
                 span.innerHTML = page;
                 updatePlayers();
         }
@@ -91,8 +115,10 @@
                 .then(response => response.text())
                 .then(text => JSON.parse(text))
                 .then(games => {
+
+
                     const fragment = document.createDocumentFragment();
-                    for (let i = (page-1)*100; i <= (page*100)-1; i++) {
+                    for (let i = (page-1)*100; i <= (page*100)-1 && i < games.length; i++) {
                         let tr = document.createElement('tr');
                         let td1 = document.createElement('td');
                         let td2 = document.createElement('td');
@@ -118,7 +144,7 @@
 
                                 break;
                         }
-                        console.log(games[i].Gametype);
+                        
                         switch (games[i].Gametype) {
                             case "Classical":
                             td4.innerHTML = "Klassisch";
@@ -153,6 +179,7 @@
                         tr.appendChild(td5);
                         tr.appendChild(td6);
                         fragment.appendChild(tr);
+                        console.log(games[i].id)
                     }
                     test.innerHTML = "";
                     test.appendChild(fragment);

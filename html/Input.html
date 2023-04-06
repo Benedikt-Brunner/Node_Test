@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="Input.css">
 </head>
 
-<body onload=addInput()>
+<body onload= addInput()>
 
     <h1>
         <a href="/">&lt/Sc Springer Bad König></a>
@@ -26,17 +26,24 @@
             <button id="myButton">Input Games</button>
         </div>
 
+        <div>
+            <button id="starttour"><a href="/tourInput">Tourniermodus</a></button>
+        </div>
+
     </div>
 
 
     <div id="Inputdivs">
- 
+      
     </div>
 
 
     <script>
         let check = window.setInterval(checktick,50)
         const button = document.getElementById('myButton');
+
+
+
         button.addEventListener('click', () => {
             const inputblocks = document.getElementsByClassName('InputBlock');
             const inputData = [];
@@ -51,6 +58,7 @@
                 inputData.push(blockData);
             }
             const data = { inputData: inputData };
+            console.log(JSON.stringify(data))
             if(checktick()){
             fetch('/button-clicked', {
                 method: 'POST',

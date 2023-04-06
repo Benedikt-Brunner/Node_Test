@@ -1,0 +1,110 @@
+
+
+
+h1 {
+    margin: auto;
+        width: fit-content;
+        font-size: 5vw;
+         font-weight: bold;
+         text-align: center;
+         font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+         margin-bottom: 5vw;
+         color: black;
+ 
+}
+a{
+    color: white;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+a:any-link{
+    text-decoration: none;
+}
+
+
+span{
+    color: black;
+}
+
+button{
+    border-radius: 50%;
+    width: 200px;
+    height: 100px;
+    position: relative;
+    color: #0f27bf;
+    background-color: green;
+   font-size: larger; 
+
+}
+
+button:active{
+    transform: translateY(5px);
+    scale: 95%;
+}
+#buttondiv{
+    flex-direction: row;
+    width: 800px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: auto;
+}
+#inputdivs{
+    border: solid 5px gray;
+    background-color: gray;
+    width: fit-content;
+    margin: auto;
+    display: flexbox;
+    justify-content: space-around;
+}
+#tourcheck{
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+.InputBlock{
+    margin: 5px;
+}
+.butdiv{    margin: auto;
+    margin-top: 200px;
+    width: fit-content;
+    display: flexbox;
+    flex-direction: row;
+ }
+
+
+
+ *{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+body{
+    font-family: Helvetica;
+    -webkit-font-smoothing: antialiased;
+    background: rgb(14, 7, 29);
+}
+h2{
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    padding: 30px 0;
+}
+
+#info{
+    margin: auto;
+    margin-top: 3vw;
+    border: solid 2px green;
+    height: 5vw;
+    display: none;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: gray;
+}
+
+#infospan{
+    color: white;
+
+}

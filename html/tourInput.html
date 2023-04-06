@@ -1,0 +1,391 @@
+<html>
+
+<head>
+    <title>
+        Test
+    </title>
+    <link rel="shortcut icon" type="image/x-icon" href="site_favicon_16_1664892280095.ico" />
+    <link rel="stylesheet" href="Inputtour.css">
+</head>
+
+<body>
+
+
+    <h1>
+        <a href="/">&lt/Sc Springer Bad König></a>
+    </h1>
+
+    <div id="buttondiv">
+
+        <div id="dynamicButt">
+            <button onclick=generateTournament() id="generatebutt">Gen</button>
+        </div>
+        <div>
+            <button onclick=reset() id="resetbutt">Reset</button>
+        </div>
+        <div>
+            <button id="starttour"><a href="/Input">Einzel Modus</a></button>
+        </div>
+
+    </div>
+    <div id="Inputdivs">
+        <label for="Name">Name:</label>
+        <input type="text" id="Tournamentname">
+        <label for="gametype">Spielart:</label>
+        <select name="gametype" id="gametypeselect">
+            <option value="Classical">Klassisch</option>
+            <option value="Rapid">Schnellschach</option>
+            <option value="Blitz">Blitz</option>
+            <option value="Chess960">Schach960</option>
+        </select>
+        <label for="Playerscount">#Spieler:</label>
+        <select name="playerscount" id="count">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+            <option value="24">24</option>
+            <option value="25">25</option>
+            <option value="26">26</option>
+            <option value="27">27</option>
+            <option value="28">28</option>
+            <option value="29">29</option>
+            <option value="30">30</option>
+            <option value="31">31</option>
+            <option value="32">32</option>
+            <option value="33">33</option>
+            <option value="34">34</option>
+            <option value="35">35</option>
+            <option value="36">36</option>
+            <option value="37">37</option>
+            <option value="38">38</option>
+            <option value="39">39</option>
+            <option value="40">40</option>
+            <option value="41">41</option>
+            <option value="42">42</option>
+            <option value="43">43</option>
+            <option value="44">44</option>
+            <option value="45">45</option>
+            <option value="46">46</option>
+            <option value="47">47</option>
+            <option value="48">48</option>
+            <option value="49">49</option>
+            <option value="50">50</option>
+        </select>
+        <label for="rounds">Runden:</label>
+        <select name="rounds" id="roundcount">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <label for="date">Datum:</label>
+        <input type="date" id="start" name="date" min="2000-01-01" max="2024-01-01">
+
+    </div>
+
+    <div id="Info">
+
+    </div>
+
+
+    <script>
+        let gameTypeglob;
+        let dateglob;
+        let nameglob;
+        let gamesglob;
+
+
+        function generateTournament() {
+            let name = document.getElementById("Tournamentname").value;
+            let gameType = document.getElementById("gametypeselect").value;
+            let date = document.getElementById("start").value;
+            let rounds = document.getElementById("roundcount").value;
+            let Players = document.getElementById("count").value;
+            let games = rounds * (Players / 2) * (Players - 1);
+            let input = document.getElementById("Inputdivs");
+            if (name == "") {
+                window.alert("Bitte geben Sie einen Namen an!")
+                return;
+            }
+            if (date == "") {
+                window.alert("Bitte geben Sie ein Datum an!")
+                return;
+            }
+            if (games == 0) {
+                window.alert("Zu wenige Spiele")
+                return;
+            }
+            let dynamic = document.getElementById("dynamicButt")
+            dynamic.innerHTML = '<button onclick=Inputtour() id="inputbutt">Input Places</button>'
+            nameglob = name;
+            dateglob = date;
+            gamesglob = games;
+            gameTypeglob = gameType;
+            input.innerHTML = ""
+            generateplaceinput(Players)
+            generateinfo()
+        }
+
+
+        function generateplaceinput(Players) {
+
+            let input = document.getElementById("Inputdivs");
+            let names = Array();
+            fetch('/getplayers', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then(response => response.text())
+                .then(text => JSON.parse(text))
+                .then(players => {
+
+
+
+
+                    for (let i = 0; i < players.length; i++) {
+                        names.push(players[i].Name)
+                    }
+
+                    for (let i = 0; i < Players; i++) {
+                        let block = document.createElement("div");
+                        block.className = "InputBlock";
+                        let select1 = document.createElement("select")
+                        select1.id = "playerplaceselect"
+                        names.forEach(name => {
+                            let html = '<option value="' + name + '">' + name + '</option>'
+                            select1.innerHTML += html
+                        })
+                        block.innerHTML += `<label for="playerplaceselect">Platz ${i + 1}: </label>`
+                        block.appendChild(select1)
+
+                        input.appendChild(block)
+                    }
+                    input.innerHTML += '<span id = "tourcheck">❌</span>'
+
+
+                })
+        }
+
+        function Inputtour() {
+            if (checkticktour()) {
+                let input = document.getElementById("Inputdivs");
+                let year = dateglob.split("-")[0];
+                let month = dateglob.split("-")[1];
+                let day = dateglob.split("-")[2];
+                let javastring = `2${nameglob}:${year}:${month}:${day}:${year}:${month}:${day}`
+                let blocks = [...document.getElementsByClassName("InputBlock")]
+                blocks.forEach(block => {
+                    let children = [...block.children]
+                    let name = children[1].value
+                    javastring += `:${name}`
+                })
+                fetch('/maketournament', {
+                    method: 'POST',
+                    body: javastring
+                })
+                    .then(response => response.text())
+                    .then(data => console.log(data))
+                    .catch(error => console.log(error));
+                let dynamic = document.getElementById("dynamicButt")
+                dynamic.innerHTML = '<button onclick=InputGames() id="inputbutt">Input Games</button>'
+                input.innerHTML = ""
+                addInput(gameTypeglob,dateglob,gamesglob);
+            } else {
+                window.alert("Fehler: Alle Spieler müssen unterschiedlich sein")
+            }
+        }
+
+        let checktour = window.setInterval(checkticktour, 50)
+
+        function checkticktour() {
+            let checksum = true;
+            let tourcheck = document.getElementById("tourcheck")
+            let blocks = [...document.getElementsByClassName("InputBlock")]
+            let names = Array()
+            for (let i = 0; i < blocks.length; i++) {
+                let currblockchildren = [...blocks[i].children]
+                names.push(currblockchildren[1].value)
+            }
+            let set = new Set(names)
+            if (set.size != names.length) {
+                checksum = false
+            }
+
+            tourcheck.innerHTML = checksum ? "✅" : "❌"
+            return checksum;
+
+        }
+
+        function generateinfo() {
+            let infodiv = document.getElementById("Info")
+            let localgametype;
+            switch (gameTypeglob) {
+                case ("Classical"): {
+                    localgametype = "Klassisch"
+                    break;
+                }
+                case ("Blitz"): {
+                    localgametype = "Blitz"
+                    break;
+                }
+                case ("Rapid"): {
+                    localgametype = "Schnellschach"
+                    break;
+                }
+                case ("Chess960"): {
+                    localgametype = "Schach960"
+                    break;
+                }
+
+            }
+            infodiv.innerHTML = `<div> <label>Name:</label> <span id = "infospan"> ${nameglob}</span> </div> <div> <label>SpielTyp:</label> <span id = "infospan">${localgametype}</span> </div> <div> <label>Datum:</label> <span id = "infospan"> ${dateglob}</span> </div> `
+            infodiv.style.display = "flex"
+        }
+
+
+        function reset() {
+            let dynamic = document.getElementById("dynamicButt")
+            dynamic.innerHTML = '<button onclick=generateTournament() id="generatebutt">Gen</button>'
+            let input = document.getElementById("Inputdivs");
+            input.innerHTML = '<label for="Name">Name:</label> <input type="text" id="Tournamentname"> <label for="gametype">Spielart:</label> <select name="gametype" id="gametypeselect"> <option value="Classical">Klassisch</option> <option value="Rapid">Schnellschach</option> <option value="Blitz">Blitz</option> <option value="Chess960">Schach960</option> </select> <label for="Playerscount">#Spieler:</label> <select name="playerscount" id="count"> <option value="0">0</option> <option value="1">1</option> <option value="2">2</option> <option value="3">3</option> <option value="4">4</option> <option value="5">5</option> <option value="6">6</option> <option value="7">7</option> <option value="8">8</option> <option value="9">9</option> <option value="10">10</option> <option value="11">11</option> <option value="12">12</option> <option value="13">13</option> <option value="14">14</option> <option value="15">15</option> <option value="16">16</option> <option value="17">17</option> <option value="18">18</option> <option value="19">19</option> <option value="20">20</option> <option value="21">21</option> <option value="22">22</option> <option value="23">23</option> <option value="24">24</option> <option value="25">25</option> <option value="26">26</option> <option value="27">27</option> <option value="28">28</option> <option value="29">29</option> <option value="30">30</option> <option value="31">31</option> <option value="32">32</option> <option value="33">33</option> <option value="34">34</option> <option value="35">35</option> <option value="36">36</option> <option value="37">37</option> <option value="38">38</option> <option value="39">39</option> <option value="40">40</option> <option value="41">41</option> <option value="42">42</option> <option value="43">43</option> <option value="44">44</option> <option value="45">45</option> <option value="46">46</option> <option value="47">47</option> <option value="48">48</option> <option value="49">49</option> <option value="50">50</option> </select> <label for="rounds">Runden:</label> <select name="rounds" id="roundcount"> <option value="1">1</option> <option value="2">2</option> <option value="3">3</option> <option value="4">4</option> <option value="5">5</option> </select> <label for="date">Datum:</label> <input type="date" id="start" name="date" min="2000-01-01" max="2024-01-01">'
+            let infodiv = document.getElementById("Info")
+            infodiv.style.display = "none"
+        }
+
+
+        function addInput(gameType, date, count) {
+
+            for (let i = 0; i < count; i++) {
+                let div = document.getElementById("Inputdivs");
+                let block = document.createElement("div");
+                block.className = "InputBlock";
+                let names = Array();
+                fetch('/getplayers', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                })
+                    .then(response => response.text())
+                    .then(text => JSON.parse(text))
+                    .then(players => {
+
+                        let select1 = document.createElement("select")
+                        let select2 = document.createElement("select")
+                        select1.name = "player1"
+                        select2.name = "player2"
+                        select1.id = "playerselect1"
+                        select2.id = "playerselect2"
+
+
+                        for (let i = 0; i < players.length; i++) {
+                            names.push(players[i].Name)
+                        }
+                        names.forEach(name => {
+                            let html = '<option value="' + name + '">' + name + '</option>'
+                            select1.innerHTML += html
+                        })
+
+                        names.forEach(name => {
+                            let html = '<option value="' + name + '">' + name + '</option>'
+                            select2.innerHTML += html
+                        })
+                        block.innerHTML += '<label for="player1">Spieler1:</label>'
+                        block.appendChild(select1)
+                        block.innerHTML += '<label for="player2"> Spieler2:</label>'
+                        block.appendChild(select2)
+                        let date = new Date().getFullYear() + 1;
+                        block.innerHTML += `<label for= "result"> Ergebniss:</label > <select name="result" id="resultselect"> <option value="WhiteWon">Weiß gewinnt</option> <option value="Draw">Remis</option> <option value="BlackWon">Schwarz gewinnt</option> </select>  <span id = "checkspan">❌</span>`
+                    })
+                div.appendChild(block)
+            }
+        }
+
+
+        let check = window.setInterval(checktick, 50)
+
+
+        function checktick() {
+            let checksum = true;
+            let blocks = [...document.getElementsByClassName("InputBlock")]
+            blocks.forEach(block => {
+                let children = [...block.children]
+                if (children[1].value != children[3].value) {
+                    children[6].innerHTML = "✅"
+                } else {
+                    children[6].innerHTML = "❌"
+                    checksum = false;
+                }
+            })
+
+            return checksum;
+
+        }
+
+
+        function InputGames() {
+            const inputblocks = document.getElementsByClassName('InputBlock');
+            const inputData = [];
+            for (let i = 0; i < inputblocks.length; i++) {
+                let inputfields = inputblocks[i].children;
+                const blockData = {};
+                for (let n = 0; n < inputfields.length; n++) {
+                    let key = inputfields[n].name;
+                    let value = inputfields[n].value;
+                    blockData[key] = value;
+
+                }
+                blockData["gametype"] = gameTypeglob
+                blockData["event"] = nameglob
+                blockData["date"] = dateglob
+
+                inputData.push(blockData);
+            }
+            const data = { inputData: inputData };
+            if (checktick()) {
+                fetch('/button-clicked', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.text())
+                    .then(data => console.log(data))
+                    .catch(error => console.log(error));
+
+                let len = inputblocks.length;
+                for (let i = 0; i < len; i++) {
+                    inputblocks.item(0).remove();
+                }
+                reset();
+            } else {
+                window.alert("Fehler: Alle Spiele müssen das richtige Format haben")
+            }
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="Tournaments.css">
 </head>
 
-<body onload = updatePlayers()>
+<body onload = upadteTournaments()>
 
 
     <div class="butdiv">
@@ -18,102 +18,60 @@
     <h1>
         <a href="/">&lt/Sc Springer Bad König></a>
     </h1>
-        <button onclick=updatePlayers()>Update</button>
+        <button onclick=upadteTournaments()>Update</button>
     </div>
     <div class="Tournamentgrid">
-        <div class="Tournamentdiv">
-            <div class="Name">
-                <h2>My Tournament</h2>
-            </div>
-            <div class="Games">
-                
-            </div>
-            <div class="Placement">
-                
-            </div>
-        </div>
-    
-        <div class="Tournamentdiv">
-            <div class="Name">
-                <h2>My Tournament</h2>
-            </div>
-            <div class="Games">
-                
-            </div>
-            <div class="Placement">
-                
-            </div>
-        </div>
-        <div class="Tournamentdiv">
-            <div class="Name">
-                <h2>My Tournament</h2>
-            </div>
-            <div class="Games">
-                
-            </div>
-            <div class="Placement">
-                
-            </div>
-        </div>
-    
-        <div class="Tournamentdiv">
-            <div class="Name">
-                <h2>My Tournament</h2>
-            </div>
-            <div class="Games">
-                
-            </div>
-            <div class="Placement">
-                
-            </div>
-        </div>
-        <div class="Tournamentdiv">
-            <div class="Name">
-                <h2>My Tournament</h2>
-            </div>
-            <div class="Games">
-                
-            </div>
-            <div class="Placement">
-                
-            </div>
-        </div>
-    
-        <div class="Tournamentdiv">
-            <div class="Name">
-                <h2>My Tournament</h2>
-            </div>
-            <div class="Games">
-                
-            </div>
-            <div class="Placement">
-                
-            </div>
-        </div>
+
     </div>
 
 
     <script>
 
-        function updatePlayers() {
-            let test = document.getElementById('Players')
-            if (test.innerHTML.length != 0) {
-                test.innerHTML = "";
-            }
-            fetch('/getplayers', {
+        function upadteTournaments(){
+            let grid = document.getElementsByClassName("Tournamentgrid").item(0);
+            
+
+            fetch('/gettour', {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
 
             })
                 .then(response => response.text())
                 .then(text => JSON.parse(text))
-                .then(players => {
-                    for (let i = 0; i < players.length; i++) {
+                .then(tournaments => {
+                    let namearray = Array()
                     
+                    for(let i = 0; i < tournaments.length; i++){
+                        namearray.push(tournaments[i].Name)
                     }
-                })
-        }
+                    let nameset = new Set(namearray)
 
+                    for (let i = 0; i < nameset.size; i++) {
+                        
+                        let sortednames = Array()
+                        for(let k = 0; k < tournaments.length; k++){
+                        if([...nameset][i] == tournaments[k].Name){
+                            sortednames.push(tournaments[k].name)
+                        }
+                    }
+                    
+                        let element = document.createElement("div");
+                        element.className = "Tournamentdiv"
+                        let placement = document.createElement("div");
+                        placement.className = "Placement"
+                        element.innerHTML = `<div class="Name"> <h2><a href="/Tournaments/${i+2}">${[...nameset][i]}</a></h2>`
+                            for(let k = 0; k < sortednames.length; k++){
+                                placement.innerHTML += `<span id="placementid" data-place="${k+1}">${sortednames[k]}</span>`
+                            }
+                            element.appendChild(placement)
+                        grid.appendChild(element);
+                    }
+                        
+                })
+
+            
+
+        }
 
 
 

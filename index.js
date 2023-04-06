@@ -20,6 +20,7 @@ const config = {
 app.set('view engine', 'ejs');
 app.use(auth(config));
 app.use(express.static("./css"));
+app.use(express.text())
 
 app.use(express.json()); 
 
@@ -35,6 +36,30 @@ app.post('/button-clicked', (req, res) => {
     res.status(400).send('Bad Request');
   }
 });
+
+app.post('/maketournament', (req, res) => {
+  const inputData = req.body;
+  if (inputData) {
+    maketournament(inputData);
+    res.send('Tournament made');
+  } else {
+    res.status(400).send('Bad Request');
+  }
+});
+
+function maketournament(javastring){
+  exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "${javastring}"`, (error, stdout, stderr) => {
+    if (error) {
+        console.log(`error: ${error.message}`);
+        return;
+    }
+    if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        return;
+    }
+    console.log(`stdout: ${stdout}`);
+  });
+}
 
 function inputGames(){
 exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "0${__dirname}/Input.json!Games"`, (error, stdout, stderr) => {
@@ -83,7 +108,7 @@ function getPlayers(callback) {
     });
 
     function getGames(callback) {
-      con.query('SELECT p1.name AS WhitePlayerName, p2.name AS BlackPlayerName, g.Result, g.Gametype, g.Date,g.URL FROM games g JOIN players p1 ON g.WhitePlayer = p1.id JOIN players p2 ON g.BlackPlayer = p2.id; ', (err, result) => {
+      con.query('SELECT g.id, p1.name AS WhitePlayerName, p2.name AS BlackPlayerName, g.Result, g.Gametype, g.Date,g.URL FROM games g JOIN players p1 ON g.WhitePlayer = p1.id JOIN players p2 ON g.BlackPlayer = p2.id ORDER BY g.id; ', (err, result) => {
         if (err) throw err;
         callback(result);
       });
@@ -95,15 +120,15 @@ function getPlayers(callback) {
     app.get('/getgames',(request, response) =>{
     
          
-      getGames((players) => {
-          response.send(players);
+      getGames((games) => {
+          response.send(games);
         });
           
   
       });
 
       function gettour(callback) {
-        con.query('SELECT Name, Classical_ELORATING, Classical_Rank, Blitz_ELORATING, Blitz_Rank, Rapid_ELORATING, Rapid_Rank, C960_Elorating, C960_Rank, Classical_Games_Played, BLitz_Games_Played, Rapid_Games_Played,C960_Games_Played,Total_Games_Played FROM Players', (err, result) => {
+        con.query('SELECT tournaments.Name, tournamentresults.placement,players.name FROM tournamentresults INNER JOIN tournaments ON tournamentresults.tournament_id=tournaments.id INNER JOIN players ON tournamentresults.player_id=players.id;', (err, result) => {
           if (err) throw err;
           callback(result);
         });
@@ -156,6 +181,17 @@ app.get('/Input',requiresAuth(),(request, response) =>{
   })
 } );
 
+app.get('/tourInput',requiresAuth(),(request, response) =>{
+  readFile('./html/tourInput.html', 'utf8', (err, html) =>{
+
+      if(err){
+          response.status(500).send("oops i did it again")
+      }
+      response.send(html);
+
+  })
+} );
+
 app.get('/Games',requiresAuth(),(request, response) =>{
   readFile('./html/Games.html', 'utf8', (err, html) =>{
 
@@ -182,7 +218,7 @@ app.get('/Tournaments',requiresAuth(),(request, response) =>{
 
 
 
-app.get('/Tournament/:tournamentId',requiresAuth(),(request, response) =>{
+app.get('/Tournaments/:tournamentId',requiresAuth(),(request, response) =>{
   var tournamentId = request.params.tournamentId;
 
     response.render('tournament', { tournamentId: tournamentId});

@@ -50,6 +50,23 @@ span{
    
 }
 
+.left10{
+    width: 3vw;
+    height: 2vw;
+    font-size: 1.5vw;
+    margin-right: 10px;
+
+}
+
+.right10{
+    width: 3vw;
+    height: 2vw;
+    font-size: 1.5vw;
+    margin-left: 10px;
+
+}
+
+
 .left{
     width: 2vw;
     height: 2vw;
