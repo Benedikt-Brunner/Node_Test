@@ -80,7 +80,9 @@
         function move10left(){
             let span = document.getElementsByClassName("Page").item(0);
             if(page <= 10){
-                return;
+                page = 1;
+                span.innerHTML = page;
+                updatePlayers();
             }else{
                 page -= 10;
                 span.innerHTML = page;

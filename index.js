@@ -6,6 +6,9 @@ const mysql = require('mysql');
 const {exec} = require("child_process");
 const http = require('http');
 const ejs = require('ejs');
+const serveFavicon = require('serve-favicon');
+const { dirname } = require('path');
+const path = require('path')
 const server = http.createServer(app);
 
 const config = {
@@ -18,12 +21,11 @@ const config = {
 };
 
 app.set('view engine', 'ejs');
+app.use(serveFavicon(path.join(__dirname,"css","site_favicon_16_1664892280095.ico")))
 app.use(auth(config));
-app.use(express.static("./css"));
+app.use(express.static(path.join(__dirname,"css")));
 app.use(express.text())
-
 app.use(express.json()); 
-
 app.set('trust proxy', true);
 
 app.post('/button-clicked', (req, res) => {
@@ -108,7 +110,7 @@ function getPlayers(callback) {
     });
 
     function getGames(callback) {
-      con.query('SELECT g.id, p1.name AS WhitePlayerName, p2.name AS BlackPlayerName, g.Result, g.Gametype, g.Date,g.URL FROM games g JOIN players p1 ON g.WhitePlayer = p1.id JOIN players p2 ON g.BlackPlayer = p2.id ORDER BY g.id; ', (err, result) => {
+      con.query('SELECT g.id, g.TOURNAMENT_ID, p1.name AS WhitePlayerName, p2.name AS BlackPlayerName, g.Result, g.Gametype, g.Date,g.URL FROM games g JOIN players p1 ON g.WhitePlayer = p1.id JOIN players p2 ON g.BlackPlayer = p2.id ORDER BY g.id; ', (err, result) => {
         if (err) throw err;
         callback(result);
       });
@@ -128,7 +130,7 @@ function getPlayers(callback) {
       });
 
       function gettour(callback) {
-        con.query('SELECT tournaments.Name, tournamentresults.placement,players.name FROM tournamentresults INNER JOIN tournaments ON tournamentresults.tournament_id=tournaments.id INNER JOIN players ON tournamentresults.player_id=players.id;', (err, result) => {
+        con.query('SELECT tournaments.id, tournaments.Name, tournamentresults.placement,players.name FROM tournamentresults INNER JOIN tournaments ON tournamentresults.tournament_id=tournaments.id INNER JOIN players ON tournamentresults.player_id=players.id;', (err, result) => {
           if (err) throw err;
           callback(result);
         });
@@ -221,7 +223,7 @@ app.get('/Tournaments',requiresAuth(),(request, response) =>{
 app.get('/Tournaments/:tournamentId',requiresAuth(),(request, response) =>{
   var tournamentId = request.params.tournamentId;
 
-    response.render('tournament', { tournamentId: tournamentId});
+    response.render('Tournament', { tournamentId: tournamentId});
 }) ;
 
 

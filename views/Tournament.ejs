@@ -1,12 +1,149 @@
-<!DOCTYPE html>
+
 <html>
 <head>
   <title>Tournament <%= tournamentId %></title>
+  <link rel="shortcut icon" type="image/x-icon" href="/site_favicon_16_1664892280095.ico" />
+  <link rel="stylesheet" href="/DynTournament.css">
 </head>
-<body>
-  <h1>Tournament <%= tournamentId %></h1>
+<body onload= (loadname(),updatePlayers())>
+  <h1> <a id="header" href="/Tournaments"></a> </h1>
+
+    
+  <div class="table-wrapper">
+    <table class="fl-table">
+        <thead>
+            <tr>
+                <th>Weiß</th>
+                <th>Schwarz</th>
+                <th>Ergebniss</th>
+                <th>SpielTyp</th>
+                <th>Datum</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody id="Games">
 
 
-  <p><a href="/tournaments">Back to tournaments</a></p>
+        <tbody>
+    </table>
+</div>
+
+
+
+  <script>
+    let id = <%= tournamentId%>;
+    let name;
+    function loadname(){
+    fetch('/gettour', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+
+            })
+                .then(response => response.text())
+                .then(text => JSON.parse(text))
+                .then(tours => {
+                  let arr = [...tours]
+                  arr.forEach(tour =>{
+                    if(tour.id == id){
+
+                      name =  tour.Name;
+                    }
+                    
+                  })
+                  document.getElementById("header").innerHTML = name;
+                })
+              }
+
+
+              function updatePlayers() {
+            let test = document.getElementById('Games')
+            
+                
+            
+            fetch('/getgames', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+
+            })
+                .then(response => response.text())
+                .then(text => JSON.parse(text))
+                .then(games => {
+
+                  let arr = Array()
+                  games.forEach(game =>{
+                    if(game.TOURNAMENT_ID == id){
+                      arr.push(game)
+                    }
+                  })
+
+                    const fragment = document.createDocumentFragment();
+                    for (let i = 0; i < arr.length; i++) {
+                        let tr = document.createElement('tr');
+                        let td1 = document.createElement('td');
+                        let td2 = document.createElement('td');
+                        let td3 = document.createElement('td');
+                        let td4 = document.createElement('td');
+                        let td5 = document.createElement('td');
+                        let td6 = document.createElement('td');
+                        td1.innerHTML = arr[i].WhitePlayerName;
+                        td2.innerHTML = arr[i].BlackPlayerName;
+                        switch (arr[i].Result) {
+                            case "WhiteWon":
+                            td3.innerHTML = "1 - 0";
+                                break;
+
+                            case "Draw":
+                            td3.innerHTML = "1/2 - 1/2";
+                            break;
+
+                            case "BlackWon": 
+                            td3.innerHTML = "0 - 1";
+                            break;
+                            default:
+
+                                break;
+                        }
+                        
+                        switch (arr[i].Gametype) {
+                            case "Classical":
+                            td4.innerHTML = "Klassisch";
+                                break;
+
+                            case "Blitz":
+                            td4.innerHTML = "Blitz";
+                            break;
+                            case "Rapid": 
+                            td4.innerHTML = "Schnellschach";
+                            break;
+                            case "Chess960":
+                            td4.innerHTML = "Schach960";
+                            break;
+                            default:
+                            td4.innerHTML = "Klassisch";
+                                break;
+                        }
+                        let date = arr[i].Date;
+                        date = date.split("T" , 1)
+                        td5.innerHTML = date;
+                        if(arr[i].URL == null){
+                            td6.innerHTML = "❌";
+                        }else{
+                            td6.innerHTML = '<a href="'+ arr[i].URL +'">✅></a>';
+                        }
+                        
+                        tr.appendChild(td1);
+                        tr.appendChild(td2);
+                        tr.appendChild(td3);
+                        tr.appendChild(td4);
+                        tr.appendChild(td5);
+                        tr.appendChild(td6);
+                        fragment.appendChild(tr);
+                        console.log(arr[i].id)
+                    }
+                    test.innerHTML = "";
+                    test.appendChild(fragment);
+                })
+        }
+  </script>
 </body>
 </html>
