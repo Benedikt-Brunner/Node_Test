@@ -9,6 +9,7 @@ const ejs = require('ejs');
 const serveFavicon = require('serve-favicon');
 const { dirname } = require('path');
 const path = require('path')
+const schedule = require('node-schedule');
 const server = http.createServer(app);
 
 const config = {
@@ -20,6 +21,13 @@ const config = {
   issuerBaseURL: 'https://dev-6nxdvsl2kt22elnw.eu.auth0.com'
 };
 
+const con = mysql.createConnection({
+  host: "localhost",
+  user: "sqluser",
+  password: "password",
+  database:"elo_datenbank"
+});
+
 app.set('view engine', 'ejs');
 app.use(serveFavicon(path.join(__dirname,"css","site_favicon_16_1664892280095.ico")))
 app.use(auth(config));
@@ -27,6 +35,85 @@ app.use(express.static(path.join(__dirname,"css")));
 app.use(express.text())
 app.use(express.json()); 
 app.set('trust proxy', true);
+
+
+
+const job = schedule.scheduleJob('0 0 1 * *', function(){setupArchive()})
+
+function setupArchive(){
+  
+  Playercheck(players =>{
+    PlayerArchivecheck(archive => {
+      if(players.length != archive.length){
+        con.query(`INSERT INTO playersArchive (player) Values (${archive.length+1})`, (err, result) => {
+          if (err) throw err;
+          setupArchive();
+        });
+      }else{
+        con.query('Select * from playersArchive where player = 1', (err, result) =>{
+          if(err) throw err;
+          let numberOfColumns = Object.keys(result[0]).length-1; 
+          con.query(`ALTER TABLE playersArchive ADD Month${numberOfColumns} varchar(255)`, (err, result) =>{
+            backupData(numberOfColumns)
+          })
+        })
+      }
+      
+    })
+  })
+  
+  
+}
+function backupData(column) {
+  getPlayers(players => {
+    for (let i = 0; i < players.length; i++){
+      let str = "";
+      str += players[i].Classical_ELORATING;
+      str += `:${players[i].Classical_Rank}`;
+      str += `:${players[i].Blitz_ELORATING}`;
+      str += `:${players[i].Blitz_Rank}`;
+      str += `:${players[i].Rapid_ELORATING}`;
+      str += `:${players[i].Rapid_Rank}`;
+      str += `:${players[i].C960_Elorating}`;
+      str += `:${players[i].C960_Rank}`;
+      str += `:${players[i].Classical_Games_Played}`;
+      str += `:${players[i].BLitz_Games_Played}`;
+      str += `:${players[i].Rapid_Games_Played}`;
+      str += `:${players[i].C960_Games_Played}`;
+      str += `:${players[i].Total_Games_Played}`;
+      
+      const query = "UPDATE playersArchive SET Month" + column + " = ? WHERE player = ?";
+      const values = [str, i+1];
+      
+      con.query(query, values, (err, result) => {
+        if (err) throw err;
+        
+      });
+      
+    }
+    console.log("done")
+  });
+}
+
+
+
+
+function Playercheck(callback) {
+  con.query('SELECT id FROM Players', (err, result) => {
+    if (err) throw err;
+    callback(result);
+  });
+}
+
+function PlayerArchivecheck(callback) {
+  con.query('SELECT Player FROM PlayersArchive', (err, result) => {
+    if (err) throw err;
+    callback(result);
+  });
+}
+
+
+
 
 app.post('/button-clicked', (req, res) => {
   const inputData = req.body.inputData;
@@ -76,12 +163,7 @@ exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "0${__dirname}/In
   console.log(`stdout: ${stdout}`);
 });}
 
-const con = mysql.createConnection({
-  host: "localhost",
-  user: "sqluser",
-  password: "password",
-  database:"elo_datenbank"
-});
+
 
 con.connect(function(err) {
   if (err) throw err;
@@ -215,6 +297,8 @@ app.get('/Tournaments',requiresAuth(),(request, response) =>{
 
   })
 } );
+
+
 
 
 

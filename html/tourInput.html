@@ -196,9 +196,11 @@
                 let day = dateglob.split("-")[2];
                 let javastring = `2${nameglob}:${year}:${month}:${day}:${year}:${month}:${day}`
                 let blocks = [...document.getElementsByClassName("InputBlock")]
+                let players = Array()
                 blocks.forEach(block => {
                     let children = [...block.children]
                     let name = children[1].value
+                    players.push(name)
                     javastring += `:${name}`
                 })
                 fetch('/maketournament', {
@@ -211,7 +213,7 @@
                 let dynamic = document.getElementById("dynamicButt")
                 dynamic.innerHTML = '<button onclick=InputGames() id="inputbutt">Input Games</button>'
                 input.innerHTML = ""
-                addInput(gameTypeglob,dateglob,gamesglob);
+                addInput(players,gameTypeglob,dateglob,gamesglob);
             } else {
                 window.alert("Fehler: Alle Spieler müssen unterschiedlich sein")
             }
@@ -275,20 +277,14 @@
         }
 
 
-        function addInput(gameType, date, count) {
+        function addInput(players, gameType, date, count) {
 
             for (let i = 0; i < count; i++) {
                 let div = document.getElementById("Inputdivs");
                 let block = document.createElement("div");
                 block.className = "InputBlock";
                 let names = Array();
-                fetch('/getplayers', {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' },
-                })
-                    .then(response => response.text())
-                    .then(text => JSON.parse(text))
-                    .then(players => {
+               
 
                         let select1 = document.createElement("select")
                         let select2 = document.createElement("select")
@@ -299,7 +295,7 @@
 
 
                         for (let i = 0; i < players.length; i++) {
-                            names.push(players[i].Name)
+                            names.push(players[i])
                         }
                         names.forEach(name => {
                             let html = '<option value="' + name + '">' + name + '</option>'
@@ -316,10 +312,10 @@
                         block.appendChild(select2)
                         let date = new Date().getFullYear() + 1;
                         block.innerHTML += `<label for= "result"> Ergebniss:</label > <select name="result" id="resultselect"> <option value="WhiteWon">Weiß gewinnt</option> <option value="Draw">Remis</option> <option value="BlackWon">Schwarz gewinnt</option> </select>  <span id = "checkspan">❌</span>`
-                    })
-                div.appendChild(block)
+                    
+                div.appendChild(block)}
             }
-        }
+        
 
 
         let check = window.setInterval(checktick, 50)
