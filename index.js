@@ -1,9 +1,9 @@
-const {readFile, readFileSync, writeFile, writeFileSync} = require('fs');
+const { readFile, readFileSync, writeFile, writeFileSync } = require('fs');
 const express = require('express');
 const { auth, requiresAuth } = require('express-openid-connect');
 const app = express();
 const mysql = require('mysql');
-const {exec} = require("child_process");
+const { exec } = require("child_process");
 const http = require('http');
 const ejs = require('ejs');
 const serveFavicon = require('serve-favicon');
@@ -25,48 +25,48 @@ const con = mysql.createConnection({
   host: "localhost",
   user: "sqluser",
   password: "password",
-  database:"elo_datenbank"
+  database: "elo_datenbank"
 });
 
 app.set('view engine', 'ejs');
-app.use(serveFavicon(path.join(__dirname,"css","site_favicon_16_1664892280095.ico")))
+app.use(serveFavicon(path.join(__dirname, "css", "site_favicon_16_1664892280095.ico")))
 app.use(auth(config));
-app.use(express.static(path.join(__dirname,"css")));
+app.use(express.static(path.join(__dirname, "css")));
 app.use(express.text())
-app.use(express.json()); 
+app.use(express.json());
 app.set('trust proxy', true);
 
 
 
-const job = schedule.scheduleJob('0 0 1 * *', function(){setupArchive()})
+const job = schedule.scheduleJob('0 0 1 * *', function () { setupArchive() })
 
-function setupArchive(){
-  
-  Playercheck(players =>{
+function setupArchive() {
+
+  Playercheck(players => {
     PlayerArchivecheck(archive => {
-      if(players.length != archive.length){
-        con.query(`INSERT INTO playersArchive (player) Values (${archive.length+1})`, (err, result) => {
+      if (players.length != archive.length) {
+        con.query(`INSERT INTO playersArchive (player) Values (${archive.length + 1})`, (err, result) => {
           if (err) throw err;
           setupArchive();
         });
-      }else{
-        con.query('Select * from playersArchive where player = 1', (err, result) =>{
-          if(err) throw err;
-          let numberOfColumns = Object.keys(result[0]).length-1; 
-          con.query(`ALTER TABLE playersArchive ADD Month${numberOfColumns} varchar(255)`, (err, result) =>{
+      } else {
+        con.query('Select * from playersArchive where player = 1', (err, result) => {
+          if (err) throw err;
+          let numberOfColumns = Object.keys(result[0]).length - 1;
+          con.query(`ALTER TABLE playersArchive ADD Month${numberOfColumns} varchar(255)`, (err, result) => {
             backupData(numberOfColumns)
           })
         })
       }
-      
+
     })
   })
-  
-  
+
+
 }
 function backupData(column) {
   getPlayers(players => {
-    for (let i = 0; i < players.length; i++){
+    for (let i = 0; i < players.length; i++) {
       let str = "";
       str += players[i].Classical_ELORATING;
       str += `:${players[i].Classical_Rank}`;
@@ -81,15 +81,15 @@ function backupData(column) {
       str += `:${players[i].Rapid_Games_Played}`;
       str += `:${players[i].C960_Games_Played}`;
       str += `:${players[i].Total_Games_Played}`;
-      
+
       const query = "UPDATE playersArchive SET Month" + column + " = ? WHERE player = ?";
-      const values = [str, i+1];
-      
+      const values = [str, i + 1];
+
       con.query(query, values, (err, result) => {
         if (err) throw err;
-        
+
       });
-      
+
     }
     console.log("done")
   });
@@ -118,7 +118,7 @@ function PlayerArchivecheck(callback) {
 app.post('/button-clicked', (req, res) => {
   const inputData = req.body.inputData;
   if (inputData) {
-    writeFileSync("Input.json",('{"Games": ' + JSON.stringify(inputData) + '}'));
+    writeFileSync("Input.json", ('{"Games": ' + JSON.stringify(inputData) + '}'));
     inputGames();
     res.send('Button clicked successfully!');
   } else {
@@ -136,167 +136,174 @@ app.post('/maketournament', (req, res) => {
   }
 });
 
-function maketournament(javastring){
+function maketournament(javastring) {
   exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "${javastring}"`, (error, stdout, stderr) => {
     if (error) {
-        console.log(`error: ${error.message}`);
-        return;
+      console.log(`error: ${error.message}`);
+      return;
     }
     if (stderr) {
-        console.log(`stderr: ${stderr}`);
-        return;
+      console.log(`stderr: ${stderr}`);
+      return;
     }
     console.log(`stdout: ${stdout}`);
   });
 }
 
-function inputGames(){
-exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "0${__dirname}/Input.json!Games"`, (error, stdout, stderr) => {
-  if (error) {
+function inputGames() {
+  exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "0${__dirname}/Input.json!Games"`, (error, stdout, stderr) => {
+    if (error) {
       console.log(`error: ${error.message}`);
       return;
-  }
-  if (stderr) {
+    }
+    if (stderr) {
       console.log(`stderr: ${stderr}`);
       return;
-  }
-  console.log(`stdout: ${stdout}`);
-});}
+    }
+    console.log(`stdout: ${stdout}`);
+  });
+}
 
 
 
-con.connect(function(err) {
+con.connect(function (err) {
   if (err) throw err;
   console.log("Connected!");
 });
 
 
 function getPlayers(callback) {
-    con.query('SELECT Name, Classical_ELORATING, Classical_Rank, Blitz_ELORATING, Blitz_Rank, Rapid_ELORATING, Rapid_Rank, C960_Elorating, C960_Rank, Classical_Games_Played, BLitz_Games_Played, Rapid_Games_Played,C960_Games_Played,Total_Games_Played FROM Players', (err, result) => {
-      if (err) throw err;
-      callback(result);
-    });
-  }
-  
- 
+  con.query('SELECT id, Name, Classical_ELORATING, Classical_Rank, Blitz_ELORATING, Blitz_Rank, Rapid_ELORATING, Rapid_Rank, C960_Elorating, C960_Rank, Classical_Games_Played, BLitz_Games_Played, Rapid_Games_Played,C960_Games_Played,Total_Games_Played FROM Players', (err, result) => {
+    if (err) throw err;
+    callback(result);
+  });
+}
 
 
-  app.get('/getplayers',(request, response) =>{
-  
-       
-    getPlayers((players) => {
-        response.send(players);
-      });
-        
 
-    });
 
-    function getGames(callback) {
-      con.query('SELECT g.id, g.TOURNAMENT_ID, p1.name AS WhitePlayerName, p2.name AS BlackPlayerName, g.Result, g.Gametype, g.Date,g.URL FROM games g JOIN players p1 ON g.WhitePlayer = p1.id JOIN players p2 ON g.BlackPlayer = p2.id ORDER BY g.id; ', (err, result) => {
-        if (err) throw err;
-        callback(result);
-      });
+app.get('/getplayers', (request, response) => {
+
+
+  getPlayers((players) => {
+    response.send(players);
+  });
+
+
+});
+
+function getGames(callback) {
+  con.query('SELECT g.id, g.TOURNAMENT_ID, p1.name AS WhitePlayerName, p2.name AS BlackPlayerName, g.Result, g.Gametype, g.Date,g.URL FROM games g JOIN players p1 ON g.WhitePlayer = p1.id JOIN players p2 ON g.BlackPlayer = p2.id ORDER BY g.id; ', (err, result) => {
+    if (err) throw err;
+    callback(result);
+  });
+}
+
+
+
+
+app.get('/getgames', (request, response) => {
+
+
+  getGames((games) => {
+    response.send(games);
+  });
+
+
+});
+
+function gettour(callback) {
+  con.query('SELECT tournaments.id, tournaments.Name, tournamentresults.placement,players.name FROM tournamentresults INNER JOIN tournaments ON tournamentresults.tournament_id=tournaments.id INNER JOIN players ON tournamentresults.player_id=players.id;', (err, result) => {
+    if (err) throw err;
+    callback(result);
+  });
+}
+
+
+
+
+app.get('/gettour', (request, response) => {
+
+
+  gettour((players) => {
+    response.send(players);
+  });
+
+
+});
+
+
+app.get('/', requiresAuth(), (request, response) => {
+  readFile('./html/Index.html', 'utf8', (err, html) => {
+
+    if (err) {
+      response.status(500).send("oops i did it again")
     }
-    
-   
-  
-  
-    app.get('/getgames',(request, response) =>{
-    
-         
-      getGames((games) => {
-          response.send(games);
-        });
-          
-  
-      });
-
-      function gettour(callback) {
-        con.query('SELECT tournaments.id, tournaments.Name, tournamentresults.placement,players.name FROM tournamentresults INNER JOIN tournaments ON tournamentresults.tournament_id=tournaments.id INNER JOIN players ON tournamentresults.player_id=players.id;', (err, result) => {
-          if (err) throw err;
-          callback(result);
-        });
-      }
-      
-     
-    
-    
-      app.get('/gettour',(request, response) =>{
-      
-           
-        gettour((players) => {
-            response.send(players);
-          });
-            
-    
-        });
-
-
-app.get('/',requiresAuth(),(request, response) =>{
-    readFile('./html/Index.html', 'utf8', (err, html) =>{
-
-        if(err){
-            response.status(500).send("oops i did it again")
-        }
-        response.send(html);
-
-    })
-} );
-
-app.get('/Players',requiresAuth(),(request, response) =>{
-  readFile('./html/Players.html', 'utf8', (err, html) =>{
-
-      if(err){
-          response.status(500).send("oops i did it again")
-      }
-      response.send(html);
+    response.send(html);
 
   })
-} );
+});
 
-app.get('/Input',requiresAuth(),(request, response) =>{
-  readFile('./html/Input.html', 'utf8', (err, html) =>{
+app.get('/Players', requiresAuth(), (request, response) => {
+  readFile('./html/Players.html', 'utf8', (err, html) => {
 
-      if(err){
-          response.status(500).send("oops i did it again")
-      }
-      response.send(html);
-
-  })
-} );
-
-app.get('/tourInput',requiresAuth(),(request, response) =>{
-  readFile('./html/tourInput.html', 'utf8', (err, html) =>{
-
-      if(err){
-          response.status(500).send("oops i did it again")
-      }
-      response.send(html);
+    if (err) {
+      response.status(500).send("oops i did it again")
+    }
+    response.send(html);
 
   })
-} );
+});
 
-app.get('/Games',requiresAuth(),(request, response) =>{
-  readFile('./html/Games.html', 'utf8', (err, html) =>{
+app.get('/Players/:PlayerId', requiresAuth(), (request, response) => {
+  var PlayerId = request.params.PlayerId;
 
-      if(err){
-          response.status(500).send("oops i did it again")
-      }
-      response.send(html);
+  response.render('Player', { PlayerId: PlayerId });
+});
 
-  })
-} );
+app.get('/Input', requiresAuth(), (request, response) => {
+  readFile('./html/Input.html', 'utf8', (err, html) => {
 
-app.get('/Tournaments',requiresAuth(),(request, response) =>{
-  readFile('./html/Tournaments.html', 'utf8', (err, html) =>{
-
-      if(err){
-          response.status(500).send("oops i did it again")
-      }
-      response.send(html);
+    if (err) {
+      response.status(500).send("oops i did it again")
+    }
+    response.send(html);
 
   })
-} );
+});
+
+app.get('/tourInput', requiresAuth(), (request, response) => {
+  readFile('./html/tourInput.html', 'utf8', (err, html) => {
+
+    if (err) {
+      response.status(500).send("oops i did it again")
+    }
+    response.send(html);
+
+  })
+});
+
+app.get('/Games', requiresAuth(), (request, response) => {
+  readFile('./html/Games.html', 'utf8', (err, html) => {
+
+    if (err) {
+      response.status(500).send("oops i did it again")
+    }
+    response.send(html);
+
+  })
+});
+
+app.get('/Tournaments', requiresAuth(), (request, response) => {
+  readFile('./html/Tournaments.html', 'utf8', (err, html) => {
+
+    if (err) {
+      response.status(500).send("oops i did it again")
+    }
+    response.send(html);
+
+  })
+});
 
 
 
@@ -304,11 +311,25 @@ app.get('/Tournaments',requiresAuth(),(request, response) =>{
 
 
 
-app.get('/Tournaments/:tournamentId',requiresAuth(),(request, response) =>{
+app.get('/Tournaments/:tournamentId', requiresAuth(), (request, response) => {
   var tournamentId = request.params.tournamentId;
 
-    response.render('Tournament', { tournamentId: tournamentId});
-}) ;
+  response.render('Tournament', { tournamentId: tournamentId });
+});
+
+app.get('/getData/:id', (request, response) => {
+  
+  getData(request.params.id, (data) => {
+    response.send(data);
+  }) 
+})
+
+function getData(id, callback) {
+  con.query(`SELECT * FROM playersArchive WHERE player = ${id}`, (err, result) => {
+    if (err) throw err;
+    callback(result);
+  });
+}
 
 
 

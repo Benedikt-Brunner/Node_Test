@@ -1,0 +1,135 @@
+<html>
+
+<head>
+    <title>Player <%= PlayerId %>
+    </title>
+    <link rel="shortcut icon" type="image/x-icon" href="/site_favicon_16_1664892280095.ico" />
+    <link rel="stylesheet" href="/DynPlayer.css">
+</head>
+
+<body onload=loadname()>
+    <h1> <a id="header" href="/Players"></a> </h1>
+
+    <div class="center">
+        <div id="chart-container"></div>
+    </div>
+
+
+
+
+    <script src='https://d3js.org/d3.v4.min.js'></script>
+    <script>
+
+
+        let id = <%= PlayerId%>;
+
+        let name;
+
+        function loadname() {
+            fetch('/getplayers', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+
+            })
+                .then(response => response.text())
+                .then(text => JSON.parse(text))
+                .then(players => {
+                    let arr = [...players]
+                    arr.forEach(player => {
+                        if (player.id == id) {
+
+                            name = player.Name;
+                        }
+
+                    })
+                    document.getElementById("header").innerHTML = name;
+                })
+        }
+
+
+        fetch(`/getData/${id}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+
+
+        })
+            .then(response => response.text())
+            .then(text => JSON.parse(text))
+            .then(players => {
+                let arr = Array();
+                let player = Object.values(players[0])
+
+                for (let i = 1; i < player.length; i++) {
+                    let obj = {};
+                    obj["rating"] = parseInt(player[i].split(":")[0])+10*i
+                    arr.push(obj)
+                }
+                draw(arr)
+            })
+
+        function draw(elos) {
+
+            const chartContainer = d3.select('#chart-container');
+
+            const width = 600;
+            const height = 400;
+
+            chartContainer
+                .style('width', `${width}px`)
+                .style('height', `${height}px`);
+
+            const svg = chartContainer.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const xScale = d3.scaleLinear()
+                .domain([0, elos.length - 1])
+                .range([0, width]);
+
+            const xAxis = d3.axisBottom(xScale)
+                .tickFormat((d, i) => `Month ${i + 1}`);
+
+
+
+
+            const yScale = d3.scaleLinear()
+                .domain(d3.extent(elos, d => d.rating))
+                .range([height, 0]);
+
+            const line = d3.line()
+                .x((d, i) => xScale(i))
+                .y(d => yScale(d.rating));
+
+
+            svg.append('path')
+                .datum(elos)
+                .attr('fill', 'none')
+                .attr('stroke', 'steelblue')
+                .attr('stroke-width', 2)
+                .attr('d', line);
+
+
+            const yAxis = d3.axisLeft(yScale);
+            
+
+            svg.append('g')
+             .call(xAxis)
+             .attr('transform', `translateY(${height})`) ;
+
+
+            svg.append('g')
+                .call(yAxis);
+
+
+        }
+
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>
