@@ -320,6 +320,7 @@ app.get('/Tournaments/:tournamentId', requiresAuth(), (request, response) => {
 
 app.get('/getData/:id', (request, response) => {
   let id = parseInt(request.params.id);
+  console.log
   if (isNaN(id)) {
     response.status(500).send(`${request.params.id} is not a valid id`);
     return;

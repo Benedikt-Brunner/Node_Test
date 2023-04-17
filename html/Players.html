@@ -83,7 +83,7 @@
                         let td12 = document.createElement('td');
                         let td13 = document.createElement('td');
                         let td14 = document.createElement('td');
-                        td1.innerHTML = players[i].Name;
+                        td1.innerHTML = `<a href = "http://localhost:3000/Players/${players[i].id}" id = "playerlink">${players[i].Name}</a>` ;
                         td2.innerHTML = players[i].Classical_ELORATING;
                         td3.innerHTML = players[i].Classical_Rank;
                         td4.innerHTML = players[i].Blitz_ELORATING;
