@@ -172,8 +172,30 @@ con.connect(function (err) {
 });
 
 
-function getPlayers(callback) {
-  con.query('SELECT id, Name, Classical_ELORATING, Classical_Rank, Blitz_ELORATING, Blitz_Rank, Rapid_ELORATING, Rapid_Rank, C960_Elorating, C960_Rank, Classical_Games_Played, BLitz_Games_Played, Rapid_Games_Played,C960_Games_Played,Total_Games_Played FROM Players', (err, result) => {
+function getPlayers(id, callback) {
+let sortby;
+let order;
+switch(id){
+  case 1: sortby = "Name"; order = "ASC"; break;
+  case 2: sortby = "Classical_ELORATING"; order = "DESC"; break;
+  case 3: sortby = "Classical_Rank"; order = "ASC"; break;
+  case 4: sortby = "Blitz_ELORATING"; order = "DESC"; break;
+  case 5: sortby = "Blitz_Rank"; order = "ASC"; break;
+  case 6: sortby = "Rapid_ELORATING"; order = "DESC"; break;
+  case 7: sortby = "Rapid_Rank"; order = "ASC"; break;
+  case 8: sortby = "C960_Elorating"; order = "DESC"; break;
+  case 9: sortby = "C960_Rank"; order = "ASC"; break;
+  case 10: sortby = "Classical_Games_Played"; order = "DESC"; break;
+  case 11: sortby = "BLitz_Games_Played"; order = "DESC"; break;
+  case 12: sortby = "Rapid_Games_Played"; order = "DESC"; break;
+  case 13: sortby = "C960_Games_Played"; order = "DESC"; break;
+  case 14: sortby = "Total_Games_Played"; order = "DESC"; break;
+  default: sortby = "Name"; order = "ASC"; break;
+
+
+}
+
+  con.query(`SELECT id, Name, Classical_ELORATING, Classical_Rank, Blitz_ELORATING, Blitz_Rank, Rapid_ELORATING, Rapid_Rank, C960_Elorating, C960_Rank, Classical_Games_Played, BLitz_Games_Played, Rapid_Games_Played,C960_Games_Played,Total_Games_Played FROM Players ORDER BY ${sortby} ${order}`, (err, result) => {
     if (err) throw err;
     callback(result);
   });
@@ -182,10 +204,15 @@ function getPlayers(callback) {
 
 
 
-app.get('/getplayers', (request, response) => {
+app.get('/getplayers/:id', (request, response) => {
+let id = parseInt(request.params.id);
+ 
+if (isNaN(id)) {
+  response.status(500).send(`${request.params.id} is not a valid id`);
+  return;
+}
 
-
-  getPlayers((players) => {
+  getPlayers(id, ( players) => {
     response.send(players);
   });
 
@@ -320,7 +347,7 @@ app.get('/Tournaments/:tournamentId', requiresAuth(), (request, response) => {
 
 app.get('/getData/:id', (request, response) => {
   let id = parseInt(request.params.id);
-  console.log
+ 
   if (isNaN(id)) {
     response.status(500).send(`${request.params.id} is not a valid id`);
     return;

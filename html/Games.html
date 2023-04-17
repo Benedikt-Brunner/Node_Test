@@ -47,7 +47,6 @@
                     <th>Ergebniss</th>
                     <th>SpielTyp</th>
                     <th>Datum</th>
-                    <th>Link</th>
                 </tr>
             </thead>
             <tbody id="Games">
@@ -127,7 +126,6 @@
                         let td3 = document.createElement('td');
                         let td4 = document.createElement('td');
                         let td5 = document.createElement('td');
-                        let td6 = document.createElement('td');
                         td1.innerHTML = games[i].WhitePlayerName;
                         td2.innerHTML = games[i].BlackPlayerName;
                         switch (games[i].Result) {
@@ -168,18 +166,13 @@
                         let date = games[i].Date;
                         date = date.split("T" , 1)
                         td5.innerHTML = date;
-                        if(games[i].URL == null){
-                            td6.innerHTML = "❌";
-                        }else{
-                            td6.innerHTML = '<a href="'+ games[i].URL +'">✅></a>';
-                        }
+
                         
                         tr.appendChild(td1);
                         tr.appendChild(td2);
                         tr.appendChild(td3);
                         tr.appendChild(td4);
                         tr.appendChild(td5);
-                        tr.appendChild(td6);
                         fragment.appendChild(tr);
                         console.log(games[i].id)
                     }

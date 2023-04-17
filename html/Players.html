@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="Players.css">
 </head>
 
-<body onload = updatePlayers()>
+<body onload = updatePlayers(1)>
 
 
     <div class="butdiv">
@@ -18,7 +18,7 @@
         <h1>
             <a href="/">&lt/Sc Springer Bad König></a>
         </h1>
-            <button onclick=updatePlayers()>Update</button>
+            <button onclick=updatePlayers(1)>Update</button>
         </div>
 
   
@@ -26,20 +26,20 @@
         <table class="fl-table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Classical_ELORATING</th>
-                    <th>Classical_Rank</th>
-                    <th>Blitz_ELORATING</th>
-                    <th>Blitz_Rank</th>
-                    <th>Rapid_ELORATING</th>
-                    <th>Rapid_Rank</th>
-                    <th>C960_Elorating</th>
-                    <th>C960_Rank</th>
-                    <th>Classical_Games_Played</th>
-                    <th>BLitz_Games_Played</th>
-                    <th>Rapid_Games_Played</th>
-                    <th>C960_Games_Played</th>
-                    <th>Total_Games_Played</th>
+                    <th onclick= updatePlayers(1)>Name</th>
+                    <th onclick= updatePlayers(2)>Classical_ELORATING</th>
+                    <th onclick= updatePlayers(3)>Classical_Rank</th>
+                    <th onclick= updatePlayers(4)>Blitz_ELORATING</th>
+                    <th onclick= updatePlayers(5)>Blitz_Rank</th>
+                    <th onclick= updatePlayers(6)>Rapid_ELORATING</th>
+                    <th onclick= updatePlayers(7)>Rapid_Rank</th>
+                    <th onclick= updatePlayers(8)>C960_Elorating</th>
+                    <th onclick= updatePlayers(9)>C960_Rank</th>
+                    <th onclick= updatePlayers(10)>Classical_Games_Played</th>
+                    <th onclick= updatePlayers(11)>BLitz_Games_Played</th>
+                    <th onclick= updatePlayers(12)>Rapid_Games_Played</th>
+                    <th onclick= updatePlayers(13)>C960_Games_Played</th>
+                    <th onclick= updatePlayers(14)>Total_Games_Played</th>
                 </tr>
             </thead>
             <tbody id="Players">
@@ -56,9 +56,9 @@
 
     <script>
 
-        function updatePlayers() {
+        function updatePlayers(sort) {
             let test = document.getElementById('Players')
-            fetch('/getplayers', {
+            fetch(`/getplayers/${sort}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
 
