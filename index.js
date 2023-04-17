@@ -312,16 +312,21 @@ app.get('/Tournaments', requiresAuth(), (request, response) => {
 
 
 app.get('/Tournaments/:tournamentId', requiresAuth(), (request, response) => {
-  var tournamentId = request.params.tournamentId;
+  let tournamentId = request.params.tournamentId;
+
 
   response.render('Tournament', { tournamentId: tournamentId });
 });
 
 app.get('/getData/:id', (request, response) => {
-  
-  getData(request.params.id, (data) => {
+  let id = parseInt(request.params.id);
+  if (isNaN(id)) {
+    response.status(500).send(`${request.params.id} is not a valid id`);
+    return;
+  }
+  getData(id, (data) => {
     response.send(data);
-  }) 
+  })
 })
 
 function getData(id, callback) {
