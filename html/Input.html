@@ -83,7 +83,7 @@
             let block = document.createElement("div");
             block.className = "InputBlock";
             let names = Array();
-            fetch('/getplayers', {
+            fetch('/getplayers/1', {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             })

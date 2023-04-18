@@ -13,15 +13,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Sono&display=swap" rel="stylesheet">
 </head>
 
-<body>
-
+<body onload = loaduser()>
+<div class = "header">
+    <div class = "User"></div>
     <div class="butdiv">
         
         <h1>
             &lt/Sc Springer Bad König>
         </h1>
-            <button onclick=logout()>Log out</button>
         </div>
+        <div></div>
+    </div>
 
     <div id="Nav">
         <div id = "Players">
@@ -40,6 +42,21 @@
 <script>
     function logout(){
         location.href = "http://localhost:3000/logout"
+    }
+
+    function loaduser(){
+        fetch("/profile", {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+
+            })
+                .then(response => response.text())
+                .then(text => JSON.parse(text))
+                .then(data => {
+                    let root = document.querySelector(':root');
+                     root.style.setProperty('--image', `url("${data.picture}")`)
+                }
+                )
     }
 </script>
 </body>

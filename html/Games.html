@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="Games.css">
 </head>
 
-<body onload = updatePlayers()>
+<body onload=updatePlayers()>
 
     <div class="butdiv">
         <h1>
             <a href="/">&lt/Sc Springer Bad König></a>
         </h1>
-            <button class="update" onclick=updatePlayers()>Update</button>
+        <button class="update" onclick=updatePlayers()>Update</button>
     </div>
 
     <div class="nav">
@@ -37,7 +37,7 @@
         </button>
     </div>
 
-  
+
     <div class="table-wrapper">
         <table class="fl-table">
             <thead>
@@ -47,6 +47,7 @@
                     <th>Ergebniss</th>
                     <th>SpielTyp</th>
                     <th>Datum</th>
+                    <th>Turnier</th>
                 </tr>
             </thead>
             <tbody id="Games">
@@ -65,49 +66,49 @@
 
         let page = 1
 
-        function moveleft(){
+        function moveleft() {
             let span = document.getElementsByClassName("Page").item(0);
-            if(page == 1){
+            if (page == 1) {
                 return;
-            }else{
+            } else {
                 page--;
                 span.innerHTML = page;
                 updatePlayers();
             }
         }
 
-        function move10left(){
+        function move10left() {
             let span = document.getElementsByClassName("Page").item(0);
-            if(page <= 10){
+            if (page <= 10) {
                 page = 1;
                 span.innerHTML = page;
                 updatePlayers();
-            }else{
+            } else {
                 page -= 10;
                 span.innerHTML = page;
                 updatePlayers();
             }
         }
 
-        function moveright(){
+        function moveright() {
             let span = document.getElementsByClassName("Page").item(0);
-                page++;
-                span.innerHTML = page;
-                updatePlayers();
+            page++;
+            span.innerHTML = page;
+            updatePlayers();
         }
 
-        function move10right(){
+        function move10right() {
             let span = document.getElementsByClassName("Page").item(0);
-                page += 10;
-                span.innerHTML = page;
-                updatePlayers();
+            page += 10;
+            span.innerHTML = page;
+            updatePlayers();
         }
 
         function updatePlayers() {
             let test = document.getElementById('Games')
-            
-                
-            
+
+
+
             fetch('/getgames', {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
@@ -116,69 +117,94 @@
                 .then(response => response.text())
                 .then(text => JSON.parse(text))
                 .then(games => {
+                    fetch('/gettour', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+
+            })
+                .then(response => response.text())
+                .then(text => JSON.parse(text))
+                            .then(tours => {
+                                
+                                let arr = [...tours];
 
 
                     const fragment = document.createDocumentFragment();
-                    for (let i = (page-1)*100; i <= (page*100)-1 && i < games.length; i++) {
+                    for (let i = (page - 1) * 100; i <= (page * 100) - 1 && i < games.length; i++) {
                         let tr = document.createElement('tr');
                         let td1 = document.createElement('td');
                         let td2 = document.createElement('td');
                         let td3 = document.createElement('td');
                         let td4 = document.createElement('td');
                         let td5 = document.createElement('td');
+                        let td6 = document.createElement('td');
                         td1.innerHTML = games[i].WhitePlayerName;
                         td2.innerHTML = games[i].BlackPlayerName;
                         switch (games[i].Result) {
                             case "WhiteWon":
-                            td3.innerHTML = "1 - 0";
+                                td3.innerHTML = "1 - 0";
                                 break;
 
                             case "Draw":
-                            td3.innerHTML = "1/2 - 1/2";
-                            break;
+                                td3.innerHTML = "1/2 - 1/2";
+                                break;
 
-                            case "BlackWon": 
-                            td3.innerHTML = "0 - 1";
-                            break;
+                            case "BlackWon":
+                                td3.innerHTML = "0 - 1";
+                                break;
                             default:
 
                                 break;
                         }
-                        
+
                         switch (games[i].Gametype) {
                             case "Classical":
-                            td4.innerHTML = "Klassisch";
+                                td4.innerHTML = "Klassisch";
                                 break;
 
                             case "Blitz":
-                            td4.innerHTML = "Blitz";
-                            break;
-                            case "Rapid": 
-                            td4.innerHTML = "Schnellschach";
-                            break;
+                                td4.innerHTML = "Blitz";
+                                break;
+                            case "Rapid":
+                                td4.innerHTML = "Schnellschach";
+                                break;
                             case "Chess960":
-                            td4.innerHTML = "Schach960";
-                            break;
+                                td4.innerHTML = "Schach960";
+                                break;
                             default:
-                            td4.innerHTML = "Klassisch";
+                                td4.innerHTML = "Klassisch";
                                 break;
                         }
                         let date = games[i].Date;
-                        date = date.split("T" , 1)
+                        date = date.split("T", 1)
                         td5.innerHTML = date;
+                        if (games[i].TOURNAMENT_ID == 1) {
+                            td6.innerHTML = "❌"
+                        } else {
 
-                        
+                            for (let j = 0; j < arr.length; j++) {
+
+                                if (arr[j].id == games[i].TOURNAMENT_ID) {
+                                    td6.innerHTML = arr[j].Name;
+
+                                }
+                            }
+
+
+                        }
+
                         tr.appendChild(td1);
                         tr.appendChild(td2);
                         tr.appendChild(td3);
                         tr.appendChild(td4);
                         tr.appendChild(td5);
+                        tr.appendChild(td6);
                         fragment.appendChild(tr);
                         console.log(games[i].id)
                     }
                     test.innerHTML = "";
                     test.appendChild(fragment);
-                })
+                })})
         }
 
 
@@ -186,7 +212,7 @@
 
 
     </script>
-   
+
 </body>
 
 </html>

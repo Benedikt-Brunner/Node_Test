@@ -1,3 +1,7 @@
+:root {
+    --image: ;
+}
+
 h1 {
     -ms-flex-align: center;
     margin: auto;
@@ -9,11 +13,10 @@ h1 {
     color: black;
     margin-right: 0;
     margin-left: 0;
-
 }
 
 body {
-    background: linear-gradient(-45deg,  #23a6d5, #54d3d3, #23d5ab,#41db9b);
+    background: linear-gradient(-45deg, #23a6d5, #54d3d3, #23d5ab, #41db9b);
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
     height: 100vh;
@@ -34,7 +37,7 @@ body {
     }
 }
 
-#Nav{
+#Nav {
     width: 45vw;
     height: 30vw;
     display: flex;
@@ -48,9 +51,9 @@ body {
 }
 
 
-  
 
-#Nav > :nth-child(1) {
+
+#Nav> :nth-child(1) {
     position: relative;
     width: 20vw;
     height: 12.5vw;
@@ -65,18 +68,18 @@ body {
 
 
 
-#Blacktext:any-link{
-    color:black;
+#Blacktext:any-link {
+    color: black;
     text-decoration: none;
 }
 
-#Whitetext:any-link{
-    color:white;
+#Whitetext:any-link {
+    color: white;
     text-decoration: none;
 }
 
 
-#Nav > :nth-child(4) {
+#Nav> :nth-child(4) {
     position: relative;
     width: 20vw;
     height: 12.5vw;
@@ -90,7 +93,7 @@ body {
 }
 
 
-#Nav > :nth-child(2) {
+#Nav> :nth-child(2) {
     position: relative;
     width: 20vw;
     height: 12.5vw;
@@ -103,7 +106,7 @@ body {
     align-items: center;
 }
 
-#Nav > :nth-child(3) {
+#Nav> :nth-child(3) {
     position: relative;
     width: 20vw;
     height: 12.5vw;
@@ -116,22 +119,22 @@ body {
     align-items: center;
 }
 
-#Nav > :nth-child(1):hover {
+#Nav> :nth-child(1):hover {
     transition: 1s;
     scale: 110%;
 }
 
-#Nav > :nth-child(2):hover {
+#Nav> :nth-child(2):hover {
     transition: 1s;
     scale: 110%;
 }
 
-#Nav > :nth-child(3):hover {
+#Nav> :nth-child(3):hover {
     transition: 1s;
     scale: 110%;
 }
 
-#Nav > :nth-child(4):hover {
+#Nav> :nth-child(4):hover {
     transition: 1s;
     scale: 110%;
 }
@@ -154,10 +157,41 @@ button:active {
     scale: 95%;
 }
 
+.User {
+    flex-basis: auto;
+    background-image: var(--image); 
+    background-size: cover;
+    width: 5vw;
+    height: 5vw;
+    border-radius: 50px;
+    margin-top: 1vw;
+    margin-left: 1vw;
+}
+
+.User:hover{
+animation: pulse 3s infinite ease-in-out ;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0px 0px 0px 0px white;
+    }
+
+    50% {
+        box-shadow: 0px 0px 15px 15px white;
+    }
+
+    100% {
+        box-shadow: 0px 0px 0px 0px white;
+    }
+}
 
 .butdiv {
-    margin-left: 24vw;
-    margin-right: 0;
+    width: fit-content;
+    margin-right: 1vw;
+}
+
+.header {
     justify-content: space-between;
     display: flex;
     flex-direction: row;
