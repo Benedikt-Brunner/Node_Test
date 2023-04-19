@@ -13,20 +13,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Sono&display=swap" rel="stylesheet">
 </head>
 
-<body onload = loaduser()>
-<div class = "header">
-    <div class = "User"></div>
-    <div class="butdiv">
-        
+<body onload=loaduser()>
+    <div class="User" id="Main" referrerpolicy="no-referrer"></div>
+    <div class="header">
         <h1>
             &lt/Sc Springer Bad König>
         </h1>
-        </div>
-        <div></div>
     </div>
 
     <div id="Nav">
-        <div id = "Players">
+        <div id="Players">
             <a id="Blacktext" href="/Players">Players</a>
         </div>
         <div id="Games">
@@ -39,13 +35,59 @@
             <a id="Blacktext" href="/Tournaments">Tournaments</a>
         </div>
     </div>
-<script>
-    function logout(){
-        location.href = "http://localhost:3000/logout"
-    }
+    <script>
+        let profile;
 
-    function loaduser(){
-        fetch("/profile", {
+        function logout() {
+            location.href = "http://localhost:3000/logout"
+        }
+
+        let mainuser = document.getElementById("Main");
+        mainuser.addEventListener('click', transform, false);
+        let bool = 0;
+
+        function transform() {
+            fetch("/profile", {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+
+            })
+                .then(response => response.text())
+                .then(text => JSON.parse(text))
+                .then(data => {
+                    if (bool == 0) {
+                        mainuser.className = "Menu";
+                        let newIco = document.createElement('div');
+                        let Greeting1 = document.createElement('span');
+                        let Greeting2 = document.createElement('span');
+                        let logout = document.createElement('a');
+                        Greeting1.innerHTML = `Willkommen` 
+                        Greeting2.innerHTML = ` ${data.nickname}!` 
+                        Greeting1.id = "greet1";
+                        Greeting2.id = "greet2";
+                        newIco.className = "User";
+                        newIco.id = "subUser"
+                        logout.href = "http://localhost:3000/logout"
+                        logout.id = "logoutlink"
+                        logout.innerHTML = "Abmelden ❌"
+                        mainuser.appendChild(newIco)
+                        mainuser.appendChild(Greeting1)
+                        mainuser.appendChild(Greeting2)
+                        mainuser.appendChild(logout)
+                        bool = 1;
+                    }else{
+                        mainuser.className = "User"
+                        mainuser.innerHTML = ""
+                        bool = 0;
+                    }
+                })
+        }
+
+
+
+
+        function loaduser() {
+            fetch("/profile", {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
 
@@ -54,11 +96,11 @@
                 .then(text => JSON.parse(text))
                 .then(data => {
                     let root = document.querySelector(':root');
-                     root.style.setProperty('--image', `url("${data.picture}")`)
+                    root.style.setProperty('--image', `url("${data.picture}")`)
                 }
                 )
-    }
-</script>
+        }
+    </script>
 </body>
 
 

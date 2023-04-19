@@ -260,7 +260,7 @@ app.get('/gettour', (request, response) => {
 });
 
 
-app.get('/', requiresAuth(), (request, response) => {
+app.get('/', (request, response) => {
   readFile('./html/Index.html', 'utf8', (err, html) => {
 
     if (err) {
@@ -369,7 +369,7 @@ function getData(id, callback) {
 
 
 
-app.get('/', (req, res) => {
+app.get('/',requiresAuth(), (req, res) => {
   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
 });
 
