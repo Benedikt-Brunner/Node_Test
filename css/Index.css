@@ -1,5 +1,6 @@
 :root {
-    --image: ;
+    --image: url(blank-profile-picture-973460.svg) ;
+    /** Get base profile image to serve statically and display if profile.picture == undefined*/
 }
 
 h1 {
@@ -168,6 +169,7 @@ button:active {
     margin-top: 1vw;
     margin-left: 1vw;
     position: absolute;
+    -webkit-transition: 1s; 
 }
 
 .User:hover{
@@ -198,6 +200,18 @@ animation: pulse 3s infinite ease-in-out ;
     display: flex;
     color: white;
     
+}
+
+.interim{
+    width: 5vw;
+    height: 5vw;
+    background-color: #161b22;
+    position: absolute;
+    border-radius: 50px;
+    -webkit-transition: 1s;
+    display: flex;
+    margin-top: 1vw;
+    margin-left: 1vw;
 }
 
 

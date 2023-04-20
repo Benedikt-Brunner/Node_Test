@@ -54,7 +54,7 @@
             })
                 .then(response => response.text())
                 .then(text => JSON.parse(text))
-                .then(data => {
+                .then(async data =>  {
                     if (bool == 0) {
                         mainuser.className = "Menu";
                         let newIco = document.createElement('div');
@@ -76,8 +76,10 @@
                         mainuser.appendChild(logout)
                         bool = 1;
                     }else{
-                        mainuser.className = "User"
                         mainuser.innerHTML = ""
+                        mainuser.className = "interim"
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                        mainuser.className = "User"
                         bool = 0;
                     }
                 })
@@ -96,7 +98,7 @@
                 .then(text => JSON.parse(text))
                 .then(data => {
                     let root = document.querySelector(':root');
-                    root.style.setProperty('--image', `url("${data.picture}")`)
+                    root.style.setProperty('--image', `url("${data.picture}")`)   
                 }
                 )
         }
