@@ -1,6 +1,6 @@
 :root {
     --image: url(blank-profile-picture-973460.svg) ;
-    /** Get base profile image to serve statically and display if profile.picture == undefined*/
+    
 }
 
 h1 {

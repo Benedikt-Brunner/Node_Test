@@ -76,9 +76,10 @@
                         mainuser.appendChild(logout)
                         bool = 1;
                     }else{
-                        mainuser.innerHTML = ""
                         mainuser.className = "interim"
+                        mainuser.innerHTML = '<div class="User" id="subUser"></div>'
                         await new Promise(resolve => setTimeout(resolve, 500));
+                        mainuser.innerHTML = ''
                         mainuser.className = "User"
                         bool = 0;
                     }
