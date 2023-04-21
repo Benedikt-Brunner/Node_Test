@@ -255,7 +255,10 @@ animation: pulse 3s infinite ease-in-out ;
     text-decoration: underline;
     height: fit-content;
     position: absolute;
-    color: red;
+    color: black;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     max-width: 95%;
+    background-color: red;
+    box-shadow: grey 0px 0px 3px 3px;
+    border-radius: 10px;
 }
