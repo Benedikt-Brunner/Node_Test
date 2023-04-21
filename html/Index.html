@@ -43,10 +43,7 @@
         let click = 0;
 
         function logoutfunc() {
-            if (click == 0) {
-                click++;
-                return;
-            }
+
             location.href = "http://localhost:3000/logout"
             window.alert("Sie sind nun ausgeloggt!")
             
@@ -66,7 +63,6 @@
                         let newIco = document.createElement('div');
                         let Greeting1 = document.createElement('span');
                         let Greeting2 = document.createElement('span');
-                        let logout = document.createElement('a');
                         Greeting1.innerHTML = `Willkommen`
                         if (data.sub.split('|')[0] == "auth0") {
                             Greeting2.innerHTML = ` ${data.nickname}!`
@@ -77,13 +73,10 @@
                         Greeting2.id = "greet2";
                         newIco.className = "User";
                         newIco.id = "subUser"
-                        logout.onclick = logoutfunc();
-                        logout.id = "logoutlink"
-                        logout.innerHTML = "Abmelden ❌"
                         mainuser.appendChild(newIco)
                         mainuser.appendChild(Greeting1)
                         mainuser.appendChild(Greeting2)
-                        mainuser.appendChild(logout)
+                        mainuser.innerHTML += '<span id = "logoutlink" onclick =  "window.event.stopPropagation(); logoutfunc();">Abmelden ❌ </span> '
                         bool = 1;
                     } else {
                         mainuser.className = "interim"
