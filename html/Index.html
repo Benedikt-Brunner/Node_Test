@@ -62,7 +62,11 @@
                         let Greeting2 = document.createElement('span');
                         let logout = document.createElement('a');
                         Greeting1.innerHTML = `Willkommen` 
-                        Greeting2.innerHTML = ` ${data.nickname}!` 
+                        if(data.sub.split('|')[0] == "auth0"){
+                            Greeting2.innerHTML = ` ${data.nickname}!`
+                        }else{
+                            Greeting2.innerHTML = ` ${data.name}!`
+                        }
                         Greeting1.id = "greet1";
                         Greeting2.id = "greet2";
                         newIco.className = "User";
