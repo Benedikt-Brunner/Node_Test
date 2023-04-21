@@ -37,14 +37,20 @@
     </div>
     <script>
         let profile;
-
-        function logout() {
-            location.href = "http://localhost:3000/logout"
-        }
-
         let mainuser = document.getElementById("Main");
         mainuser.addEventListener('click', transform, false);
         let bool = 0;
+        let click = 0;
+
+        function logoutfunc() {
+            if (click == 0) {
+                click++;
+                return;
+            }
+            location.href = "http://localhost:3000/logout"
+            window.alert("Sie sind nun ausgeloggt!")
+            
+        }
 
         function transform() {
             fetch("/profile", {
@@ -54,24 +60,24 @@
             })
                 .then(response => response.text())
                 .then(text => JSON.parse(text))
-                .then(async data =>  {
+                .then(async data => {
                     if (bool == 0) {
                         mainuser.className = "Menu";
                         let newIco = document.createElement('div');
                         let Greeting1 = document.createElement('span');
                         let Greeting2 = document.createElement('span');
                         let logout = document.createElement('a');
-                        Greeting1.innerHTML = `Willkommen` 
-                        if(data.sub.split('|')[0] == "auth0"){
+                        Greeting1.innerHTML = `Willkommen`
+                        if (data.sub.split('|')[0] == "auth0") {
                             Greeting2.innerHTML = ` ${data.nickname}!`
-                        }else{
+                        } else {
                             Greeting2.innerHTML = ` ${data.name}!`
                         }
                         Greeting1.id = "greet1";
                         Greeting2.id = "greet2";
                         newIco.className = "User";
                         newIco.id = "subUser"
-                        logout.href = "http://localhost:3000/logout"
+                        logout.onclick = logoutfunc();
                         logout.id = "logoutlink"
                         logout.innerHTML = "Abmelden ❌"
                         mainuser.appendChild(newIco)
@@ -79,7 +85,7 @@
                         mainuser.appendChild(Greeting2)
                         mainuser.appendChild(logout)
                         bool = 1;
-                    }else{
+                    } else {
                         mainuser.className = "interim"
                         mainuser.innerHTML = '<div class="User" id="subUser"></div>'
                         await new Promise(resolve => setTimeout(resolve, 500));
@@ -103,7 +109,7 @@
                 .then(text => JSON.parse(text))
                 .then(data => {
                     let root = document.querySelector(':root');
-                    root.style.setProperty('--image', `url("${data.picture}")`)   
+                    root.style.setProperty('--image', `url("${data.picture}")`)
                 }
                 )
         }
