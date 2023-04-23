@@ -24,7 +24,7 @@ Make sure to use the provided database image and setup the required User, specif
 
 ```javascript	
     const con = mysql.createConnection({
-    host: "localhost",
+     host: "localhost",
      user: "sqluser",
      password: "password",
      database: "elo_datenbank"
