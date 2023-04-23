@@ -45,4 +45,4 @@ Feel free to contribute to this project by forking it and creating a pull reques
 
 To call data from the Backend eiter use a existing API-Endpoint or create a new one. Please make sure to follow basic SQL safety Principles and call out any vulnerabilities in the code.
 
-Documentation will be added in the future, but feel free to add you own documentation to the code or contact me with any Questions that come up .
+Documentation will be added in the future, but feel free to add you own documentation to the code or contact me with any Questions that come up.
