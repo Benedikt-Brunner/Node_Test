@@ -40,6 +40,8 @@ app.set('trust proxy', true);
 
 const job = schedule.scheduleJob('0 0 1 * *', function () { setupArchive() })
 
+
+
 function setupArchive() {
 
   Playercheck(players => {
@@ -62,10 +64,12 @@ function setupArchive() {
     })
   })
 
+ 
+
 
 }
 function backupData(column) {
-  getPlayers(players => {
+  getPlayers(15,players => {
     for (let i = 0; i < players.length; i++) {
       let str = "";
       str += players[i].Classical_ELORATING;
@@ -190,6 +194,7 @@ switch(id){
   case 12: sortby = "Rapid_Games_Played"; order = "DESC"; break;
   case 13: sortby = "C960_Games_Played"; order = "DESC"; break;
   case 14: sortby = "Total_Games_Played"; order = "DESC"; break;
+  case 15: sortby = "id"; order = "ASC"; break;
   default: sortby = "Name"; order = "ASC"; break;
 
 
@@ -321,6 +326,17 @@ app.get('/Games', requiresAuth(), (request, response) => {
   })
 });
 
+app.get('/Test', requiresAuth(), (request, response) => {
+  readFile('./html/Test.html', 'utf8', (err, html) => {
+
+    if (err) {
+      response.status(500).send("oops i did it again")
+    }
+    response.send(html);
+
+  })
+});
+
 app.get('/Tournaments', requiresAuth(), (request, response) => {
   readFile('./html/Tournaments.html', 'utf8', (err, html) => {
 
@@ -371,6 +387,10 @@ function getData(id, callback) {
 
 app.get('/',requiresAuth(), (req, res) => {
   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+
+app.post('/archive', (req, res) => {
+  setupArchive();
 });
 
 
