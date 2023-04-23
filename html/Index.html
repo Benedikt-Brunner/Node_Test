@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Sono&display=swap" rel="stylesheet">
 </head>
 
 <body onload=loaduser()>
@@ -65,9 +66,9 @@
                         let Greeting2 = document.createElement('span');
                         Greeting1.innerHTML = `Willkommen`
                         if (data.sub.split('|')[0] == "auth0") {
-                            Greeting2.innerHTML = ` ${data.nickname}!`
+                            Greeting2.innerHTML = ` ${data.nickname}`
                         } else {
-                            Greeting2.innerHTML = ` ${data.name}!`
+                            Greeting2.innerHTML = ` ${data.name}`
                         }
                         Greeting1.id = "greet1";
                         Greeting2.id = "greet2";

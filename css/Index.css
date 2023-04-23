@@ -144,13 +144,12 @@ body {
 
 button {
     border-radius: 25px;
-    width: 175px;
-    height: 50px;
     margin-right: 1vw;
     margin-top: 2vw;
     color: red;
     background-color: black;
     font-size: 2vw;
+    max-width: 95%;
 
 }
 
@@ -199,6 +198,7 @@ animation: pulse 3s infinite ease-in-out ;
     -webkit-transition: 1s;
     display: flex;
     color: white;
+    justify-content: center;
     
 }
 
@@ -212,6 +212,7 @@ animation: pulse 3s infinite ease-in-out ;
     display: flex;
     margin-top: 1vw;
     margin-left: 1vw;
+    justify-content: center;
 }
 
 
@@ -224,6 +225,8 @@ animation: pulse 3s infinite ease-in-out ;
 #subUser{
     width: 3vw;
     height: 3vw;
+    margin-top: 1vw;
+    margin-left: 0vw;
     -webkit-transition: 1s;
     box-shadow: 0px 0px 3px 3px white;
 }
@@ -231,34 +234,35 @@ animation: pulse 3s infinite ease-in-out ;
 #greet1{
     font-size: 1vw;
     margin-top: 60%;
-    margin-left: 5%;
-    text-decoration: underline;
+    margin-left: 0%;
     height: fit-content;
     position: absolute;
+    font-family: 'Bruno Ace SC', cursive;
 }
 
 #greet2{
     font-size: 1vw;
     margin-top: 75%;
-    margin-left: 5%;
-    text-decoration: underline;
+    margin-left: 0%;
     height: fit-content;
     position: absolute;
-    max-width: 95%;
+    width: fit-content;
     word-wrap:break-word;
+    text-align: center;
+    font-family: 'Bruno Ace SC', cursive;
 }
 
 #logoutlink{
     font-size: 1vw;
     margin-top: 110%;
-    margin-left: 5%;
+    margin-left: 10%;
     text-decoration: underline;
     height: fit-content;
+    width: 8.5vw;
     position: absolute;
     color: black;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     max-width: 95%;
     background-color: red;
-    box-shadow: grey 0px 0px 3px 3px;
     border-radius: 10px;
 }
