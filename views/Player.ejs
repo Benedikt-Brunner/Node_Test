@@ -9,11 +9,35 @@
 
 <body onload=loadname()>
     <h1> <a id="header" href="/Players"></a> </h1>
+    <div class="Table">
+        <div class="wrap">
+            <div class="Header">Klassisch</div>
+            <div id="center">
 
-    <div id="center">
-        
+            </div>
+        </div>
+
+        <div class="wrap">
+            <div class="Header">Blitz</div>
+            <div id="center">
+
+            </div>
+        </div>
+
+        <div class="wrap">
+            <div class="Header">Schnellschach</div>
+            <div id="center">
+
+            </div>
+        </div>
+
+        <div class="wrap">
+            <div class="Header">C960</div>
+            <div id="center">
+
+            </div>
+        </div>
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
@@ -22,8 +46,20 @@
 
 
         let id = <%= PlayerId%>;
-
+        let data;
         let name;
+
+        fetch(`/getData/${id}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+
+
+        })
+            .then(response => response.text())
+            .then(text => JSON.parse(text))
+            .then(players => {
+                data = Object.values(players[0])
+            })
 
         function loadname() {
             fetch('/getplayers/1', {
@@ -47,38 +83,29 @@
         }
 
 
-        fetch(`/getData/${id}`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
 
+        function classicalGraph() {
+            for (let i = 1; i < data.length; i++) {
+                let obj = {};
+                obj["Rating"] = parseInt(data[i].split(":")[0])
+                obj["Monate"] = i
+                arr.push(obj)
+            }
+            let center = document.getElementById("center");
+            center.append(
 
-        })
-            .then(response => response.text())
-            .then(text => JSON.parse(text))
-            .then(players => {
-                let arr = Array();
-                let player = Object.values(players[0])
+                Plot.plot({
+                    inset: 10,
+                    y: { domain: [0, 3000] },
+                    marks: [
+                        Plot.frame({ fill: "#eaeaea" }),
+                        Plot.gridY({ stroke: "#fff", strokeOpacity: 1 }),
+                        Plot.gridX({ stroke: "#fff", strokeOpacity: 1 }),
+                        Plot.line(arr, { x: "Monate", y: "Rating" })
+                    ]
+                }))
+        }
 
-                for (let i = 1; i < player.length; i++) {
-                    let obj = {};
-                    obj["Rating"] = parseInt(player[i].split(":")[0]) 
-                    obj["Monate"] = i
-                    arr.push(obj)
-                }
-                let center = document.getElementById("center");
-                center.append(
-
-                    Plot.plot({
-                        inset: 10,
-                        y : {domain: [0, 3000]},
-                        marks: [
-                            Plot.frame({ fill: "#eaeaea" }),
-                            Plot.gridY({ stroke: "#fff", strokeOpacity: 1 }),
-                            Plot.gridX({ stroke: "#fff", strokeOpacity: 1 }),
-                            Plot.line(arr, { x: "Monate", y: "Rating" })
-                        ]
-                    }))
-            })
 
 
 
