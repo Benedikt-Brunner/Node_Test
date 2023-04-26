@@ -11,17 +11,17 @@
     <h1> <a id="header" href="/Players"></a> </h1>
 
     <div class="Table">
-        <div class="outer" id="up-left">
+        <div class="outer" id="up-left" onclick= selectMode(1)>
             <span>Klassisch</span>
         </div>
-        <div class="outer" id="up-right">
+        <div class="outer" id="up-right" onclick= selectMode(2)>
             <span>Blitz</span>
         </div>
         <div class="center" id="main"></div>
-        <div class="outer" id="down-left">
+        <div class="outer" id="down-left" onclick= selectMode(3)>
             <span>Schnellschach</span>
         </div>
-        <div class="outer" id="down-right">
+        <div class="outer" id="down-right" onclick= selectMode(4)>
             <span>C960</span>
         </div>
     </div>
@@ -35,6 +35,7 @@
         let id = <%= PlayerId%>;
         let data;
         let name;
+        let selected = 0;
 
         fetch(`/getData/${id}`, {
             method: 'GET',
@@ -93,7 +94,47 @@
                 }))
         }
 
+        function selectMode(mode) {
+            if(selected != 0){
+                reset();
+                return;
+            }
+            let classical = document.getElementById("up-left");
+            let blitz = document.getElementById("up-right");
+            let rapid = document.getElementById("down-left");
+            let c960 = document.getElementById("down-right");
 
+            if (mode == 1) {
+                blitz.style.opacity = 0;
+                rapid.style.opacity = 0;
+                c960.style.opacity = 0;
+            } else if (mode == 2) {
+                classical.style.opacity = 0;
+                rapid.style.opacity = 0;
+                c960.style.opacity = 0;
+            } else if (mode == 3) {
+                classical.style.opacity = 0;
+                blitz.style.opacity = 0;
+                c960.style.opacity = 0;
+            } else if (mode == 4) {
+                classical.style.opacity = 0;
+                blitz.style.opacity = 0;
+                rapid.style.opacity = 0;
+            }
+            selected = 1;
+        }
+
+        function reset(){
+            let classical = document.getElementById("up-left");
+            let blitz = document.getElementById("up-right");
+            let rapid = document.getElementById("down-left");
+            let c960 = document.getElementById("down-right");
+            classical.style.opacity = 1;
+            blitz.style.opacity = 1;
+            rapid.style.opacity = 1;
+            c960.style.opacity = 1;
+            selected = 0;
+        }
 
 
     </script>

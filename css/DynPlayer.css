@@ -164,7 +164,8 @@ span{
     border-radius: 500px;
     width: 40%;
     height: 0;
-    padding-bottom: 40%
+    padding-bottom: 40%;
+    transition: 1s;
 }
 
 .center {
