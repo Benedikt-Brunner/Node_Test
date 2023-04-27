@@ -72,18 +72,21 @@
 
 
 
-        function classicalGraph() {
+        async function classicalGraph() {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            let arr = [];
             for (let i = 1; i < data.length; i++) {
                 let obj = {};
                 obj["Rating"] = parseInt(data[i].split(":")[0])
                 obj["Monate"] = i
                 arr.push(obj)
             }
-            let center = document.getElementById("center");
+            let center = document.getElementById("maintransition");
             center.append(
 
                 Plot.plot({
                     inset: 10,
+                    width: 400,
                     y: { domain: [0, 3000] },
                     marks: [
                         Plot.frame({ fill: "#eaeaea" }),
@@ -99,40 +102,40 @@
                 reset();
                 return;
             }
-            let classical = document.getElementById("up-left");
-            let blitz = document.getElementById("up-right");
-            let rapid = document.getElementById("down-left");
-            let c960 = document.getElementById("down-right");
+            let outers = [...document.getElementsByClassName("outer")]
+            let main = document.getElementById("main");
+            let root = document.querySelector(":root");
+            main.className = "centertransition";
+            main.id = "maintransition"
+            if(mode == 1){
+            root.style.setProperty("--maincolor", "blue");
+            classicalGraph();
+        } else if(mode == 2){
+            root.style.setProperty("--maincolor", "yellow");
+        } else if(mode == 3){
+            root.style.setProperty("--maincolor", "red");
+        } else if(mode == 4){
+            root.style.setProperty("--maincolor", "green");
+        }
+            outers.forEach(outer =>{
+                outer.style.opacity = 0
+                outer.style.display = "none"
+            })
 
-            if (mode == 1) {
-                blitz.style.opacity = 0;
-                rapid.style.opacity = 0;
-                c960.style.opacity = 0;
-            } else if (mode == 2) {
-                classical.style.opacity = 0;
-                rapid.style.opacity = 0;
-                c960.style.opacity = 0;
-            } else if (mode == 3) {
-                classical.style.opacity = 0;
-                blitz.style.opacity = 0;
-                c960.style.opacity = 0;
-            } else if (mode == 4) {
-                classical.style.opacity = 0;
-                blitz.style.opacity = 0;
-                rapid.style.opacity = 0;
-            }
-            selected = 1;
+            selected = mode;
+
         }
 
         function reset(){
-            let classical = document.getElementById("up-left");
-            let blitz = document.getElementById("up-right");
-            let rapid = document.getElementById("down-left");
-            let c960 = document.getElementById("down-right");
-            classical.style.opacity = 1;
-            blitz.style.opacity = 1;
-            rapid.style.opacity = 1;
-            c960.style.opacity = 1;
+            let outers = [...document.getElementsByClassName("outer")]
+            let main = document.getElementById("maintransition");
+            let root = document.querySelector(":root");
+            main.className = "center";
+            main.id = "main"
+            root.style.setProperty("--maincolor", "whitesmoke");
+            outers.forEach(outer =>{
+                outer.style.opacity = 1
+                outer.style.display = "flex"})
             selected = 0;
         }
 
