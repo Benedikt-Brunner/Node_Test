@@ -172,7 +172,11 @@ span{
     width: 40%;
     height: 0;
     padding-bottom: 40%;
-    transition: 1s;
+    transition: 2s;
+}
+
+.outer:hover{
+    cursor: pointer ;
 }
 
 .centertransition{
@@ -189,7 +193,7 @@ span{
 
 
 .center {
-    transition: 1s;
+    transition: 2s;
     border-radius: 500px;
     border: dashed 3px white;
     width: 60%;
@@ -215,3 +219,60 @@ span{
     text-align: center;
     color: black;
 }
+
+.off{
+    display: none;
+}
+
+.on{
+    display: flex;
+}
+
+#closeTable{
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    justify-content: center;
+    align-items: center;
+    border-radius: 500px;
+    width: 20%;
+    height: 0;
+    padding-bottom: 20%;
+    background-color: rgb(218, 116, 116);
+    animation: show-up 2s ease-out forwards;
+}
+
+@keyframes show-up {
+    from{
+        width: 0;
+        padding-bottom: 0;
+    }
+
+    to{
+        width: 20%;
+        padding-bottom: 20%;
+    }
+}
+
+#x-span{
+    color: red;
+    font-size: 250%;
+    animation: text 2s ease-out forwards;
+}
+
+#x-span:hover{
+    cursor: pointer ;
+}
+
+@keyframes text {
+    from{
+       font-size: 0%;
+    }
+
+    to{
+        font-size: 250%;
+    }
+}
+
+

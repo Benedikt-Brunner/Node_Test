@@ -24,6 +24,9 @@
         <div class="outer" id="down-right" onclick= selectMode(4)>
             <span>C960</span>
         </div>
+        <div class = "off" id ="closeTable">
+            <span onclick=reset() id = "x-span">X</span>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
@@ -97,6 +100,81 @@
                 }))
         }
 
+        async function blitzGraph() {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            let arr = [];
+            for (let i = 1; i < data.length; i++) {
+                let obj = {};
+                obj["Rating"] = parseInt(data[i].split(":")[2])
+                obj["Monate"] = i
+                arr.push(obj)
+            }
+            let center = document.getElementById("maintransition");
+            center.append(
+
+                Plot.plot({
+                    inset: 10,
+                    width: 400,
+                    y: { domain: [0, 3000] },
+                    marks: [
+                        Plot.frame({ fill: "#eaeaea" }),
+                        Plot.gridY({ stroke: "#fff", strokeOpacity: 1 }),
+                        Plot.gridX({ stroke: "#fff", strokeOpacity: 1 }),
+                        Plot.line(arr, { x: "Monate", y: "Rating" })
+                    ]
+                }))
+        }
+
+        async function rapidGraph() {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            let arr = [];
+            for (let i = 1; i < data.length; i++) {
+                let obj = {};
+                obj["Rating"] = parseInt(data[i].split(":")[4])
+                obj["Monate"] = i
+                arr.push(obj)
+            }
+            let center = document.getElementById("maintransition");
+            center.append(
+
+                Plot.plot({
+                    inset: 10,
+                    width: 400,
+                    y: { domain: [0, 3000] },
+                    marks: [
+                        Plot.frame({ fill: "#eaeaea" }),
+                        Plot.gridY({ stroke: "#fff", strokeOpacity: 1 }),
+                        Plot.gridX({ stroke: "#fff", strokeOpacity: 1 }),
+                        Plot.line(arr, { x: "Monate", y: "Rating" })
+                    ]
+                }))
+        }
+
+        async function c960Graph() {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            let arr = [];
+            for (let i = 1; i < data.length; i++) {
+                let obj = {};
+                obj["Rating"] = parseInt(data[i].split(":")[6])
+                obj["Monate"] = i
+                arr.push(obj)
+            }
+            let center = document.getElementById("maintransition");
+            center.append(
+
+                Plot.plot({
+                    inset: 10,
+                    width: 400,
+                    y: { domain: [0, 3000] },
+                    marks: [
+                        Plot.frame({ fill: "#eaeaea" }),
+                        Plot.gridY({ stroke: "#fff", strokeOpacity: 1 }),
+                        Plot.gridX({ stroke: "#fff", strokeOpacity: 1 }),
+                        Plot.line(arr, { x: "Monate", y: "Rating" })
+                    ]
+                }))
+        }
+
         function selectMode(mode) {
             if(selected != 0){
                 reset();
@@ -112,31 +190,47 @@
             classicalGraph();
         } else if(mode == 2){
             root.style.setProperty("--maincolor", "yellow");
+            blitzGraph();
         } else if(mode == 3){
             root.style.setProperty("--maincolor", "red");
+            rapidGraph();
         } else if(mode == 4){
             root.style.setProperty("--maincolor", "green");
+            c960Graph();
         }
-            outers.forEach(outer =>{
+            outers.forEach(async outer => {
                 outer.style.opacity = 0
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 outer.style.display = "none"
             })
-
+            on();
             selected = mode;
 
         }
 
-        function reset(){
+       async function reset(){
             let outers = [...document.getElementsByClassName("outer")]
             let main = document.getElementById("maintransition");
             let root = document.querySelector(":root");
+            off();
             main.className = "center";
             main.id = "main"
+            main.innerHTML = "";
             root.style.setProperty("--maincolor", "whitesmoke");
+            await new Promise(resolve => setTimeout(resolve, 2000));
             outers.forEach(outer =>{
                 outer.style.opacity = 1
                 outer.style.display = "flex"})
             selected = 0;
+        }
+
+        function on(){
+            let close = document.getElementById("closeTable");
+            close.className = "on";
+        }
+        function off(){
+            let close = document.getElementById("closeTable");
+            close.className = "off";
         }
 
 
