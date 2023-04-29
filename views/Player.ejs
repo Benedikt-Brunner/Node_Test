@@ -73,106 +73,68 @@
                 })
         }
 
+        function makearray(index){
+            let arr = [];
+            for (let i = 1; i < data.length; i++) {
+                let obj = {};
+                obj["Rating"] = parseInt(data[i].split(":")[index])
+                obj["Monate"] = i
+                arr.push(obj)
+            }
+            return arr;
+        }
+
+        function makeoptions(arr){
+            console.table(arr)
+            let optionsObject = {
+                    inset: 10,
+                    width: 400,
+                    y: { domain: [0, 3000] },
+                    marks: [
+                    Plot.ruleY([0]),
+                    Plot.areaY(arr, {x: "Monate", y: "Rating",fillOpacity: 0.2}),
+                    Plot.lineY(arr, {x: "Monate", y: "Rating", marker: "dot"})
+                    ]
+                }
+            return optionsObject;
+            }
+
 
 
         async function classicalGraph() {
             await new Promise(resolve => setTimeout(resolve, 2000));
-            let arr = [];
-            for (let i = 1; i < data.length; i++) {
-                let obj = {};
-                obj["Rating"] = parseInt(data[i].split(":")[0])
-                obj["Monate"] = i
-                arr.push(obj)
-            }
+            let arr = makearray(0);
             let center = document.getElementById("maintransition");
             center.append(
 
-                Plot.plot({
-                    inset: 10,
-                    width: 400,
-                    y: { domain: [0, 3000] },
-                    marks: [
-                        Plot.frame({ fill: "#eaeaea" }),
-                        Plot.gridY({ stroke: "#fff", strokeOpacity: 1 }),
-                        Plot.gridX({ stroke: "#fff", strokeOpacity: 1 }),
-                        Plot.line(arr, { x: "Monate", y: "Rating" })
-                    ]
-                }))
+                Plot.plot(makeoptions(arr)))
         }
 
         async function blitzGraph() {
             await new Promise(resolve => setTimeout(resolve, 2000));
-            let arr = [];
-            for (let i = 1; i < data.length; i++) {
-                let obj = {};
-                obj["Rating"] = parseInt(data[i].split(":")[2])
-                obj["Monate"] = i
-                arr.push(obj)
-            }
+            let arr = makearray(2);
             let center = document.getElementById("maintransition");
             center.append(
 
-                Plot.plot({
-                    inset: 10,
-                    width: 400,
-                    y: { domain: [0, 3000] },
-                    marks: [
-                        Plot.frame({ fill: "#eaeaea" }),
-                        Plot.gridY({ stroke: "#fff", strokeOpacity: 1 }),
-                        Plot.gridX({ stroke: "#fff", strokeOpacity: 1 }),
-                        Plot.line(arr, { x: "Monate", y: "Rating" })
-                    ]
-                }))
+            Plot.plot(makeoptions(arr)))
         }
 
         async function rapidGraph() {
             await new Promise(resolve => setTimeout(resolve, 2000));
-            let arr = [];
-            for (let i = 1; i < data.length; i++) {
-                let obj = {};
-                obj["Rating"] = parseInt(data[i].split(":")[4])
-                obj["Monate"] = i
-                arr.push(obj)
-            }
+            let arr = makearray(4);
             let center = document.getElementById("maintransition");
             center.append(
 
-                Plot.plot({
-                    inset: 10,
-                    width: 400,
-                    y: { domain: [0, 3000] },
-                    marks: [
-                        Plot.frame({ fill: "#eaeaea" }),
-                        Plot.gridY({ stroke: "#fff", strokeOpacity: 1 }),
-                        Plot.gridX({ stroke: "#fff", strokeOpacity: 1 }),
-                        Plot.line(arr, { x: "Monate", y: "Rating" })
-                    ]
-                }))
+            Plot.plot(makeoptions(arr)))
         }
 
         async function c960Graph() {
             await new Promise(resolve => setTimeout(resolve, 2000));
-            let arr = [];
-            for (let i = 1; i < data.length; i++) {
-                let obj = {};
-                obj["Rating"] = parseInt(data[i].split(":")[6])
-                obj["Monate"] = i
-                arr.push(obj)
-            }
+            let arr = makearray(6);
             let center = document.getElementById("maintransition");
             center.append(
 
-                Plot.plot({
-                    inset: 10,
-                    width: 400,
-                    y: { domain: [0, 3000] },
-                    marks: [
-                        Plot.frame({ fill: "#eaeaea" }),
-                        Plot.gridY({ stroke: "#fff", strokeOpacity: 1 }),
-                        Plot.gridX({ stroke: "#fff", strokeOpacity: 1 }),
-                        Plot.line(arr, { x: "Monate", y: "Rating" })
-                    ]
-                }))
+            Plot.plot(makeoptions(arr)))
         }
 
         function selectMode(mode) {

@@ -202,15 +202,7 @@ span{
     box-shadow: 0px 0px 20px 20px var(--maincolor);
 }
 
-.wrap {
-    display: flex;
-    flex-direction: row;
-    width: 20vw;
-    min-width: 400px;
-    height: 30vh;
-    justify-content: center;
-    border: solid 3px green;
-}
+
 
 .header {
     width: 100%;
@@ -236,11 +228,12 @@ span{
     justify-content: center;
     align-items: center;
     border-radius: 500px;
-    width: 20%;
+    width: max(50px,20%);
     height: 0;
-    padding-bottom: 20%;
+    padding-bottom: max(50px,20%);
     background-color: rgb(218, 116, 116);
     animation: show-up 2s ease-out forwards;
+    position: relative;
 }
 
 @keyframes show-up {
@@ -257,7 +250,7 @@ span{
 
 #x-span{
     color: red;
-    font-size: 250%;
+    font-size: 50%;
     animation: text 2s ease-out forwards;
 }
 
