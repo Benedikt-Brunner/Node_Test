@@ -10,10 +10,24 @@
 <body onload=loadname()>
     <h1> <a id="header" href="/Players"></a> </h1>
 
-    <div id="center">
-        
+    <div class="Table">
+        <div class="outer" id="up-left" onclick= selectMode(1)>
+            <span>Klassisch</span>
+        </div>
+        <div class="outer" id="up-right" onclick= selectMode(2)>
+            <span>Blitz</span>
+        </div>
+        <div class="center" id="main"></div>
+        <div class="outer" id="down-left" onclick= selectMode(3)>
+            <span>Schnellschach</span>
+        </div>
+        <div class="outer" id="down-right" onclick= selectMode(4)>
+            <span>C960</span>
+        </div>
+        <div class = "off" id ="closeTable">
+            <span onclick=reset() id = "x-span">X</span>
+        </div>
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
@@ -22,8 +36,21 @@
 
 
         let id = <%= PlayerId%>;
-
+        let data;
         let name;
+        let selected = 0;
+
+        fetch(`/getData/${id}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+
+
+        })
+            .then(response => response.text())
+            .then(text => JSON.parse(text))
+            .then(players => {
+                data = Object.values(players[0])
+            })
 
         function loadname() {
             fetch('/getplayers/1', {
@@ -46,40 +73,127 @@
                 })
         }
 
+        function makearray(index){
+            let arr = [];
+            for (let i = 1; i < data.length; i++) {
+                let obj = {};
+                obj["Rating"] = parseInt(data[i].split(":")[index])
+                obj["Monate"] = i
+                arr.push(obj)
+            }
+            return arr;
+        }
 
-        fetch(`/getData/${id}`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-
-
-        })
-            .then(response => response.text())
-            .then(text => JSON.parse(text))
-            .then(players => {
-                let arr = Array();
-                let player = Object.values(players[0])
-
-                for (let i = 1; i < player.length; i++) {
-                    let obj = {};
-                    obj["Rating"] = parseInt(player[i].split(":")[0]) 
-                    obj["Monate"] = i
-                    arr.push(obj)
+        function makeoptions(arr){
+            console.table(arr)
+            let optionsObject = {
+                    inset: 10,
+                    width: 400,
+                    y: { domain: [0, 3000] },
+                    marks: [
+                    Plot.ruleY([0]),
+                    Plot.areaY(arr, {x: "Monate", y: "Rating",fillOpacity: 0.2}),
+                    Plot.lineY(arr, {x: "Monate", y: "Rating", marker: "dot"})
+                    ]
                 }
-                let center = document.getElementById("center");
-                center.append(
+            return optionsObject;
+            }
 
-                    Plot.plot({
-                        inset: 10,
-                        y : {domain: [0, 3000]},
-                        marks: [
-                            Plot.frame({ fill: "#eaeaea" }),
-                            Plot.gridY({ stroke: "#fff", strokeOpacity: 1 }),
-                            Plot.gridX({ stroke: "#fff", strokeOpacity: 1 }),
-                            Plot.line(arr, { x: "Monate", y: "Rating" })
-                        ]
-                    }))
+
+
+        async function classicalGraph() {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            let arr = makearray(0);
+            let center = document.getElementById("maintransition");
+            center.append(
+
+                Plot.plot(makeoptions(arr)))
+        }
+
+        async function blitzGraph() {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            let arr = makearray(2);
+            let center = document.getElementById("maintransition");
+            center.append(
+
+            Plot.plot(makeoptions(arr)))
+        }
+
+        async function rapidGraph() {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            let arr = makearray(4);
+            let center = document.getElementById("maintransition");
+            center.append(
+
+            Plot.plot(makeoptions(arr)))
+        }
+
+        async function c960Graph() {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            let arr = makearray(6);
+            let center = document.getElementById("maintransition");
+            center.append(
+
+            Plot.plot(makeoptions(arr)))
+        }
+
+        function selectMode(mode) {
+            if(selected != 0){
+                reset();
+                return;
+            }
+            let outers = [...document.getElementsByClassName("outer")]
+            let main = document.getElementById("main");
+            let root = document.querySelector(":root");
+            main.className = "centertransition";
+            main.id = "maintransition"
+            if(mode == 1){
+            root.style.setProperty("--maincolor", "blue");
+            classicalGraph();
+        } else if(mode == 2){
+            root.style.setProperty("--maincolor", "yellow");
+            blitzGraph();
+        } else if(mode == 3){
+            root.style.setProperty("--maincolor", "red");
+            rapidGraph();
+        } else if(mode == 4){
+            root.style.setProperty("--maincolor", "green");
+            c960Graph();
+        }
+            outers.forEach(async outer => {
+                outer.style.opacity = 0
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                outer.style.display = "none"
             })
+            on();
+            selected = mode;
 
+        }
+
+       async function reset(){
+            let outers = [...document.getElementsByClassName("outer")]
+            let main = document.getElementById("maintransition");
+            let root = document.querySelector(":root");
+            off();
+            main.className = "center";
+            main.id = "main"
+            main.innerHTML = "";
+            root.style.setProperty("--maincolor", "whitesmoke");
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            outers.forEach(outer =>{
+                outer.style.opacity = 1
+                outer.style.display = "flex"})
+            selected = 0;
+        }
+
+        function on(){
+            let close = document.getElementById("closeTable");
+            close.className = "on";
+        }
+        function off(){
+            let close = document.getElementById("closeTable");
+            close.className = "off";
+        }
 
 
     </script>

@@ -1,11 +1,17 @@
-body{
+:root{
+    --maincolor: whitesmoke; 
+}
+
+body {
     background: rgb(14, 7, 29);
     font-family: Helvetica;
 }
-h1{
+
+h1 {
     text-align: center;
     font-size: 5vw;
     color: white;
+    height: 6vw;
 }
 
 a {
@@ -17,12 +23,249 @@ a:any-link {
     text-decoration: none;
 }
 
-#center{
+#center {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-svg{
+svg {
     background-color: white;
 }
+
+span{
+    margin-top: 100%;
+    position: relative;
+    color: white;
+    font-size: 1.5vw;
+
+}
+
+.Table {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    grid-template-rows: 1fr 1.5fr 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        ". . ."
+        ". . ."
+        ". . .";
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: calc(100vh - (8vw + 2em));
+    max-height: 600px;
+    align-items: center;
+    justify-items: center;
+}
+
+#up-left {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    box-shadow: 0px 0px 8px 8px blue;
+    animation: movement 15s 1s ease-in-out infinite forwards;
+}
+
+#up-right {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    box-shadow: 0px 0px 8px 8px yellow;
+    animation: movement 15s 2s ease-in-out infinite forwards;
+}
+
+#down-left {
+    grid-row-start: 3;
+    grid-row-end: 4;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    box-shadow: 0px 0px 8px 8px red;
+    animation: movement 15s 3s ease-in-out infinite forwards;
+}
+
+#down-right {
+    grid-row-start: 3;
+    grid-row-end: 4;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    box-shadow: 0px 0px 8px 8px green;
+    animation: movement 15s 4s ease-in-out infinite forwards;
+}
+
+#main{
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    animation: rotating 10s ease-in-out infinite forwards;
+}
+
+#maintransition{
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+@keyframes rotating {
+    from {
+      -ms-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -webkit-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    to {
+      -ms-transform: rotate(360deg);
+      -moz-transform: rotate(360deg);
+      -webkit-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes movement {
+    0%{
+        translate: 0px 0px
+    }
+    10%{
+        translate: 10px 10px;
+    }
+    20%{
+        translate: 15px 5px
+    }
+    30%{
+        translate: 2px -5px
+    }
+    40%{
+        translate: -4px -3px;
+    }
+    50%{
+        translate: -10px -2px
+    }
+    60%{
+        translate: -7px -6px
+    }
+    70%{
+        translate: 0px 3px
+    }
+    80%{
+        translate: -2px 5px
+    }
+    90%{
+        translate: 2px 3px
+    }
+    100%{
+        translate: 0px 0px
+    }
+  }
+
+.outer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 500px;
+    width: 40%;
+    height: 0;
+    padding-bottom: 40%;
+    transition: 2s;
+}
+
+.outer:hover{
+    cursor: pointer ;
+}
+
+.centertransition{
+    transition: 2s;
+    border: dashed 3px white;
+    width: 600px;
+    height: 600px;
+    box-shadow: 0px 0px 20px 20px var(--maincolor);
+    animation: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.center {
+    transition: 2s;
+    border-radius: 500px;
+    border: dashed 3px white;
+    width: 60%;
+    height: 0;
+    padding-bottom: 60%;
+    box-shadow: 0px 0px 20px 20px var(--maincolor);
+}
+
+
+
+.header {
+    width: 100%;
+    height: 15%;
+    background-color: aliceblue;
+    text-align: center;
+    color: black;
+}
+
+.off{
+    display: none;
+}
+
+.on{
+    display: flex;
+}
+
+#closeTable{
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    justify-content: center;
+    align-items: center;
+    border-radius: 500px;
+    width: max(50px,20%);
+    height: 0;
+    padding-bottom: max(50px,20%);
+    background-color: rgb(218, 116, 116);
+    animation: show-up 2s ease-out forwards;
+    position: relative;
+}
+
+@keyframes show-up {
+    from{
+        width: 0;
+        padding-bottom: 0;
+    }
+
+    to{
+        width: 20%;
+        padding-bottom: 20%;
+    }
+}
+
+#x-span{
+    color: red;
+    font-size: 50%;
+    animation: text 2s ease-out forwards;
+}
+
+#x-span:hover{
+    cursor: pointer ;
+}
+
+@keyframes text {
+    from{
+       font-size: 0%;
+    }
+
+    to{
+        font-size: 250%;
+    }
+}
+
+
