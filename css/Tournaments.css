@@ -9,6 +9,17 @@ body {
     background: rgb(14, 7, 29);
 }
 
+span{
+    color: black;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-size: 1vw;
+    border-radius: 10px;
+    margin-left: 5vw;
+    margin-right: 5vw ;
+}
+
 h1 {
     -ms-flex-align: center;
     margin: auto;
@@ -33,17 +44,7 @@ a:any-link {
     text-decoration: none;
 }
 
-button {
-    border-radius: 50%;
-    width: 175px;
-    height: 90px;
-    margin-right: 1vw;
-    margin-top: 1vw;
-    color: #0f27bf;
-    background-color: white;
-    font-size: 2vw;
 
-}
 
 button:active {
     transform: translateY(5px);
@@ -92,6 +93,12 @@ button:active {
     padding-right: 25%;
   }
 
+  *{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
 .Placement{
     overflow-y: auto;
     overflow: scroll;
@@ -124,13 +131,13 @@ button:active {
     height: var(--height);
     margin-left: 2.5%;
     margin-right: 2.5%;
+    padding-left: 2.5%;
     display: inline-grid;
     width: 95%;
     grid-template-rows: repeat(auto-fill, 20vw);
     grid-template-columns: [row1-start] 45% [last-line] 45%;
     gap: 5%;
-
-    
+    align-items: stretch;
 }
 
 h2{
@@ -140,6 +147,70 @@ h2{
     text-align: center;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     color: white;
+}
+
+.nav{
+    margin: auto;
+    margin-bottom: 50px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    justify-content: space-between;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+.left10{
+    width: 3vw;
+    height: 2vw;
+    font-size: 1.5vw;
+    margin-right: 10px;
+
+}
+
+.right10{
+    width: 3vw;
+    height: 2vw;
+    font-size: 1.5vw;
+    margin-left: 10px;
+
+}
+
+
+.left{
+    width: 2vw;
+    height: 2vw;
+    font-size: 1.5vw;
+}
+
+
+.left:active {
+    transform: translateY(2px);
+    scale: 95%;
+}
+
+.right{
+    width: 2vw;
+    height: 2vw;
+    font-size: 1.5vw;
+}
+
+.right:active {
+    transform: translateY(2px);
+    scale: 95%;
+}
+
+
+.page{
+    color: white;
+    background-color: grey;
+    width: fit-content;
+    padding: 1%;
+    height: 2vw;
 }
 
 

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="Tournaments.css">
 </head>
 
-<body onload = upadteTournaments()>
+<body onload = updadteTournaments()>
 
 
     <div class="butdiv">
@@ -20,6 +20,25 @@
     </h1>
 
     </div>
+
+    <div class="nav">
+        <button class="left10" onclick=move10left()>
+            &lt&lt
+        </button>
+        <button class="left" onclick=moveleft()>
+            &lt
+        </button>
+        <span class="Page">
+            1
+        </span>
+        <button class="right" onclick=moveright()>
+            >
+        </button>
+        <button class="right10" onclick=move10right()>
+            >>
+        </button>
+    </div>
+
     <div class="Tournamentgrid">
 
     </div>
@@ -27,7 +46,48 @@
 
     <script>
 
-        function upadteTournaments(){
+        
+let page = 1
+
+function moveleft() {
+    let span = document.getElementsByClassName("Page").item(0);
+    if (page == 1) {
+        return;
+    } else {
+        page--;
+        span.innerHTML = page;
+        updadteTournaments();
+    }
+}
+
+function move10left() {
+    let span = document.getElementsByClassName("Page").item(0);
+    if (page <= 10) {
+        page = 1;
+        span.innerHTML = page;
+        updadteTournaments();
+    } else {
+        page -= 10;
+        span.innerHTML = page;
+        updadteTournaments();
+    }
+}
+
+function moveright() {
+    let span = document.getElementsByClassName("Page").item(0);
+    page++;
+    span.innerHTML = page;
+    updadteTournaments();
+}
+
+function move10right() {
+    let span = document.getElementsByClassName("Page").item(0);
+    page += 10;
+    span.innerHTML = page;
+    updadteTournaments();
+}
+
+        function updadteTournaments(){
             let grid = document.getElementsByClassName("Tournamentgrid").item(0);
             
 
@@ -40,14 +100,14 @@
                 .then(text => JSON.parse(text))
                 .then(tournaments => {
                     let namearray = Array()
-                    
+                    const fragment = document.createDocumentFragment();
                     for(let i = 0; i < tournaments.length; i++){
                         namearray.push(tournaments[i].Name)
                     }
                     let nameset = new Set(namearray)
 
-                    for (let i = 0; i < nameset.size; i++) {
-                        
+                    for (let i = (page - 1) * 6; i <= (page * 6) - 1 && i < nameset.size; i++) {
+                        console.log(i)
                         let sortednames = Array()
                         for(let k = 0; k < tournaments.length; k++){
                         if([...nameset][i] == tournaments[k].Name){
@@ -64,9 +124,10 @@
                                 placement.innerHTML += `<span id="placementid" data-place="${k+1}">${sortednames[k]}</span>`
                             }
                             element.appendChild(placement)
-                        grid.appendChild(element);
+                        fragment.appendChild(element);
                     }
-                        
+                    grid.innerHTML = ""
+                    grid.appendChild(fragment)
                 })
 
             
