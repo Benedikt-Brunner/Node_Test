@@ -208,8 +208,7 @@
                     body: javastring
                 })
                     .then(response => response.text())
-                    .then(data => console.log(data))
-                    .catch(error => console.log(error));
+                    .then(data => window.alert(`Server: \n`  +data));
                 let dynamic = document.getElementById("dynamicButt")
                 dynamic.innerHTML = '<button onclick=InputGames() id="inputbutt">Input Games</button>'
                 input.innerHTML = ""
@@ -365,8 +364,7 @@
                     body: JSON.stringify(data)
                 })
                     .then(response => response.text())
-                    .then(data => console.log(data))
-                    .catch(error => console.log(error));
+                    .then(data => window.alert(`Server: \n`  +data));
 
                 let len = inputblocks.length;
                 for (let i = 0; i < len; i++) {

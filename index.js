@@ -11,6 +11,7 @@ const { dirname } = require('path');
 const path = require('path')
 const schedule = require('node-schedule');
 const server = http.createServer(app);
+const EventEmitter = require('events');
 
 const config = {
   authRequired: false,
@@ -119,54 +120,77 @@ function PlayerArchivecheck(callback) {
 
 
 
-app.post('/button-clicked', (req, res) => {
+
+app.post('/button-clicked', async (req, res) => {
   const inputData = req.body.inputData;
   if (inputData) {
-    writeFileSync("Input.json", ('{"Games": ' + JSON.stringify(inputData) + '}'));
-    inputGames();
-    res.send('Button clicked successfully!');
+    try {
+      writeFileSync("Input.json", ('{"Games": ' + JSON.stringify(inputData) + '}'));
+      await inputGames();
+      res.send('Button clicked successfully!');
+    } catch (e) {
+      console.log("Error: ", e.message);
+      res.status(500).send(e.message);
+    }
   } else {
     res.status(400).send('Bad Request');
   }
 });
-
-app.post('/maketournament', (req, res) => {
-  const inputData = req.body;
-  if (inputData) {
-    maketournament(inputData);
-    res.send('Tournament made');
-  } else {
-    res.status(400).send('Bad Request');
-  }
-});
-
-function maketournament(javastring) {
-  exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "${javastring}"`, (error, stdout, stderr) => {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.log(`stderr: ${stderr}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-  });
-}
 
 function inputGames() {
-  exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "0${__dirname}/Input.json!Games"`, (error, stdout, stderr) => {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.log(`stderr: ${stderr}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
+  return new Promise((resolve, reject) => {
+    exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "0${__dirname}/Input.json!Games"`, (error, stdout, stderr) => {
+      if (error) { 
+        let msg = error.message.split("Exception")[2].split("at")[0]
+        console.log(`error: ${error.message}`);
+        reject(new Error(`Execution error: ${msg}`));
+      }
+      if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        reject(new Error(`Stderr: ${stderr}`));
+      }
+      console.log(`stdout: ${stdout}`);
+      resolve();
+    });
   });
 }
+
+
+app.post('/maketournament', async (req, res) => {
+  const inputData = req.body;
+  if (inputData) {
+    try {
+      await maketournament(inputData);
+      res.send('Tournament made');
+    } catch (e) {
+      res.status(500).send(e.message);
+    }
+  } else {
+    res.status(400).send('Bad Request');
+  }
+});
+
+
+function maketournament(javastring) {
+  return new Promise((resolve, reject) => {
+    exec(`java -jar ${__dirname}/club_elo_project-1.0-SNAPSHOT.jar "${javastring}"`, (error, stdout, stderr) => {
+      if (error) {
+        let msg = error.message.split("Exception")[2].split("at")[0]
+        console.log(`error: ${error.message}`);
+        reject(new Error(`Execution error: ${msg}`));
+      }
+      if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        reject(new Error(`Stderr: ${stderr}`));
+      }
+      console.log(`stdout: ${stdout}`);
+      resolve();
+    });
+  });
+}
+
+
+
 
 
 
