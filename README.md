@@ -4,7 +4,7 @@
 
 ## Installation
 
-Prequisites: 
+Prerequisites: 
 - **NodeJS**
 - **Java** 
 -  **MySQL**
@@ -30,7 +30,7 @@ Make sure to use the provided database image and setup the required User, specif
      database: "elo_datenbank"
     });
 ```
->These credentials are obviously for testing and dev only and will be secured before deployment.
+>These credentials are obviously for testing and dev only and will be secured before deployment, as are the Auth0 credentials provided in Index.js.
 
 The Java Backend and the nodeJS server should work without any further configuration as long as their respecitve runtimes are configured correctly and the required dependencies are installed.
 

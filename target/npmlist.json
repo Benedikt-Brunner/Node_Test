@@ -1,1 +1,1 @@
-{"version":"1.0.0","name":"node_test","dependencies":{"express":{"version":"4.18.2"},"mysql":{"version":"2.18.1"},"nodemon":{"version":"2.0.21"}}}
+{"version":"1.0.0","name":"node_test","dependencies":{"ejs":{"version":"3.1.9"},"express-openid-connect":{"version":"2.12.1"},"express":{"version":"4.18.2"},"mysql":{"version":"2.18.1"},"node-schedule":{"version":"2.1.1"},"nodemon":{"version":"2.0.21"},"serve-favicon":{"version":"2.5.0"}}}
