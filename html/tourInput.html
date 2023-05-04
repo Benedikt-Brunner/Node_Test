@@ -160,10 +160,6 @@
                 .then(response => response.text())
                 .then(text => JSON.parse(text))
                 .then(players => {
-
-
-
-
                     for (let i = 0; i < players.length; i++) {
                         names.push(players[i].Name)
                     }
@@ -310,7 +306,7 @@
                         block.innerHTML += '<label for="player2"> Spieler2:</label>'
                         block.appendChild(select2)
                         let date = new Date().getFullYear() + 1;
-                        block.innerHTML += `<label for= "result"> Ergebniss:</label > <select name="result" id="resultselect"> <option value="WhiteWon">Weiß gewinnt</option> <option value="Draw">Remis</option> <option value="BlackWon">Schwarz gewinnt</option> </select>  <span id = "checkspan">❌</span>`
+                        block.innerHTML += `<label for= "result"> Ergebniss:</label > <select name="result" id="resultselect"> <option value="WhiteWon">Weiß gewinnt</option> <option value="Draw">Remis</option> <option value="BlackWon">Schwarz gewinnt</option> <option value="NoRes">Nicht gespielt</option> </select>  <span id = "checkspan">❌</span>`
                     
                 div.appendChild(block)}
             }
@@ -354,8 +350,10 @@
                 blockData["event"] = nameglob
                 blockData["date"] = dateglob
 
+                if(blockData["result"] != "NoRes"){
                 inputData.push(blockData);
-            }
+            }    
+        }
             const data = { inputData: inputData };
             if (checktick()) {
                 fetch('/button-clicked', {
