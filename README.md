@@ -1,4 +1,4 @@
-# Sc-Springer-Bad-Koenig-Website-example
+# SISEC (System for internal skill estimation and comparison)
 
 >This is a express powered Webserver, using a java + SQL backend to host an internal rating system for a local chess club.
 
